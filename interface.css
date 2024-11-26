@@ -1,0 +1,185 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px; 
+    background-color: #f0f0f0;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav li {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    margin-right: 20px; 
+}
+
+nav a { 
+    font-family: 'Roboto', sans-serif; 
+    font-weight: 300; 
+    font-size: 14px; 
+    color: #808080; 
+    letter-spacing: 0.5px; 
+    text-decoration: none; 
+  }
+
+.menu-icon {
+    height: 20px; 
+    width: 20px;
+    margin-bottom: 5px; 
+}
+
+.logo img {
+    height: 50px; 
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav li {
+    margin-right: 20px;
+}
+
+.user-profile img {
+    height: 40px; 
+    width: 40px; 
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.dashboard {
+    position: fixed;
+    top: 23px;
+    right: 23px;
+    width: 300px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    display: none; 
+    z-index: 1000;
+    border-radius: 10px;
+}
+
+.dashboard .profile {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.dashboard .profile img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.dashboard .profile h2 {
+    margin-top: 10px;
+}
+
+.dashboard .button {
+    display: block; 
+    width: 80%; 
+    padding: 10px;
+    background-image: linear-gradient(to right, #0077FF, #FFD700);
+    color: #fff;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px; 
+    margin-left: auto; 
+    margin-right: auto; 
+}
+
+.dashboard .menu {
+    margin-bottom: 20px;
+}
+
+.dashboard .menu h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.dashboard .menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dashboard .menu li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.dashboard .menu li:last-child {
+    border-bottom: none;
+}
+
+.dashboard .menu li:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.dashboard a.button {
+    text-decoration: none;
+    color: #fff;
+}
+
+
+
+.dashboard .submenu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    margin-bottom: 20px; 
+}
+
+.dashboard .submenu li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.dashboard .submenu li:last-child {
+    border-bottom: none;
+}
+
+.dashboard .submenu li:hover {
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+.arrow-container {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background-color:  #f0f0f0; 
+    padding: 10px; 
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .arrow {
+    width: 0; 
+    height: 0; 
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent; 
+    border-right: 20px solid black; 
+  }
