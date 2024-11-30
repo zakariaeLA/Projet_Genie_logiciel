@@ -1,48 +1,39 @@
-const express = require("express");
-const mongoose = require("mongoose");
-//const Etudiant = require("./models/Etudiant");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken"); // Pour créer des tokens
+const express = require('express');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken'); // Pour générer un token JWT
 
-const app = express();
-app.use(express.json());
+const router = express.Router();
 
-app.post("/login", async (req, res) => {
+// Route de connexion
+router.post('/connexion', async (req, res) => {
   const { email, motDePasse } = req.body;
+
   try {
-    const etudiant = await Etudiant.findOne({ email });
-    if (!etudiant) {
-      return res.status(404).json({ message: "Utilisateur non trouvé." });
+    // Ici, tu peux vérifier les données d'un utilisateur fictif
+    const utilisateur = { email: 'user@example.com', motDePasse: '$2b$10$APeq5Aik4.hAKpq.Iemb4Ob.MyGCHiq5c1f/4ZT116o5u0agCEMuO' }; // Remplace avec une vraie logique
+
+    // Vérification de l'email (tu pourrais faire une recherche dans la base de données)
+    if (email !== utilisateur.email) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
     }
 
-    const motDePasseValide = await bcrypt.compare(
-      motDePasse,
-      etudiant.motDePasse
-    );
+    // Vérification du mot de passe
+    const motDePasseValide = await bcrypt.compare(motDePasse, utilisateur.motDePasse);
     if (!motDePasseValide) {
-      return res.status(401).json({ message: "Mot de passe incorrect." });
+      return res.status(401).json({ message: 'Mot de passe incorrect.' });
     }
 
-    // Générer un token JWT
+    // Génération du token JWT
     const token = jwt.sign(
-      { id: etudiant._id, email: etudiant.email },
-      "secret", // Clé secrète
-      { expiresIn: "1h" } // Durée de validité
+      { email: utilisateur.email },
+      'secret',  // Clé secrète
+      { expiresIn: '1h' }  // Durée de validité du token
     );
 
-    res.status(200).json({ token, message: "Connexion réussie." });
+    return res.status(200).json({ token, message: 'Connexion réussie.' });
   } catch (error) {
-    res.status(500).json({ message: "Erreur serveur.", error });
+    return res.status(500).json({ message: 'Erreur serveur.', error });
   }
 });
 
-// Lancer le serveur pour Test seulement
-const PORT = 5000;
-
-app.listen(PORT, () =>
-  console.log(`Serveur démarré sur le port http://localhost:5000/ `)
-);
-
-app.get("/", (req, res) => {
-  res.send(" Login route Working :-) ");
-});
+module.exports = router;
