@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./login.css"; // Importation du fichier CSS
+import "./connexion.css";
 
-const Login = () => {
+const Connexion = () => {
   const [email, setEmail] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
   const [message, setMessage] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // État pour gérer la visibilité du mot de passe
-  const [showModal, setShowModal] = useState(true); // État pour afficher/masquer la fenêtre
+  const [showPassword, setShowPassword] = useState(false);
+  const [showModal, setShowModal] = useState(true);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,15 +24,17 @@ const Login = () => {
     } catch (error) {
       console.error("Erreur lors de la connexion :", error.response?.data);
       setMessage(error.response?.data?.message || "Une erreur est survenue.");
+      setEmail("");
+      setMotDePasse("");
     }
   };
 
   const closeModal = () => {
-    setShowModal(false); // Ferme la fenêtre modale
+    setShowModal(false);
   };
 
   const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword); // Alterne entre visible et masqué
+    setShowPassword(!showPassword); 
   };
 
   return (
@@ -67,13 +69,13 @@ const Login = () => {
                     className="toggle-password"
                     onClick={togglePasswordVisibility}
                   >
-                    {showPassword ? "👁️" : "👁️‍🗨️"}
+                    {showPassword ? "🙊" : "🙈"}
                   </span>
                 </div>
               </div>
               <button type="submit">Se connecter</button>
             </form>
-            {message && <p>{message}</p>}
+            {message && <p className="error-message">{message}</p>}
           </div>
         </div>
       )}
@@ -81,4 +83,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Connexion;
