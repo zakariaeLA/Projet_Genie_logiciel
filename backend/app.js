@@ -1,35 +1,25 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const connexionRoute = require('./routes/connexion');
-
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());  // Middleware pour parser les requêtes JSON
-
-// Utilisation de la route de connexion
-app.use('/api', connexionRoute);
-
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`Serveur démarré sur http://localhost:${PORT}`);
-});
 const express = require("express");
-const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 const cors = require("cors");
+const connexionRoute = require("./routes/connexion");
+const mongoose = require("mongoose");
 require("dotenv").config({ path: "./config/.env" });
 
-const app = express();
 const port = process.env.PORT || 5000;
+const app = express();
 
 // Middleware
 app.use(cors());
+app.use(bodyParser.json());
 app.use(express.json());
+
+// Utilisation de la route de connexion
+app.use("/api", connexionRoute);
 
 // Connexion à MongoDB Atlas
 const uri = process.env.MONGO_URI; // Assure-toi d'ajouter l'URL dans ton fichier .env
 mongoose
-  .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(uri)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log("Error connecting to MongoDB:", err));
 
