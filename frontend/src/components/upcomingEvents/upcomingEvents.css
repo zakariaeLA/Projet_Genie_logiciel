@@ -1,0 +1,17 @@
+.UpcomingEvents_container{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+.UpcomingEvents_container img{
+    width: 300px;
+    height: 300px;
+}
+@media screen and (max-width:667px){
+    .MuiButtonBase-root.MuiTab-root.MuiTab-textColorPrimary{
+        font-size: 12px !important;
+        padding: 5px !important;
+    }
+}
