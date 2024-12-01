@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <script>
+    function handleButtonClick() {
+      console.log("participé");
+    }
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CALENDRIER</title>
@@ -12,6 +17,7 @@
   </header>
 
   <main>
+    
     <section id="calendrier">
       <div class="calendar-header">
         <button>&lt;</button>
@@ -69,7 +75,7 @@
 
     <section id="details-evenement">
   <div class="upper-section">
-    <img src="images/cosmonight.jpeg" alt="Image de l'événement">
+    <img src="images/cosmoNightt.jpeg" alt="Image de l'événement">
     <div class="event-info">
       <h2>COSMONIGHT</h2>
       <p>02/11/2024</p>
@@ -81,7 +87,11 @@
     activités liées à l'observation des étoiles, aux conférences et aux ateliers pratiques.
   </p>
   <div class="button-wrapper">
-    <button>Je participe</button>
+    <button onclick="handleButtonClick()">Je participe</button>
+
+
+
+
   </div>
 </section>
   </main>
