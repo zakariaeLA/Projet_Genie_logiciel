@@ -1,0 +1,149 @@
+/* Global */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f1f1f1;
+    height: 100vh; /* Hauteur totale de la fenêtre */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+header {
+    background-color: #fff;
+    display: flex;
+    justify-content: center; /* Center the navigation */
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Title Section */
+h1 {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 40px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Main Sections */
+main {
+    display: flex;
+    justify-content: space-around;
+    align-items: center; /* Centrer verticalement */
+    flex-grow: 1; /* Étendre la section principale */
+    margin: 0 20px;
+}
+
+/* Calendrier Section */
+#calendrier {
+    background: #f8f6f6;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 40%;
+    height: auto; /* Ajuste automatiquement la hauteur */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centrer verticalement le contenu */
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header h2 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.days, .dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 columns for days of the week */
+    text-align: center;
+    margin-top: 10px;
+}
+
+.days div {
+    font-weight: bold;
+    color: #333;
+}
+
+.dates div {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 2px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    transition: background-color 0.2s ease;
+    position: relative; /* Required for the star positioning */
+}
+
+.dates div:hover {
+    background-color: #e0e0e0;
+}
+
+/* Style des étoiles */
+.star {
+    width: 20px;
+    height: 20px;
+    margin-left: 5px;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.star.yellow {
+    background-color: gold;
+}
+
+.star.gray {
+    background-color: gray;
+}
+
+/* Event Details Section */
+#details-evenement {
+    background: #888787;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 35%;
+    text-align: center;
+    height: 70%; /* Augmenter la hauteur */
+    display: flex;
+    flex-direction: column; /* Organiser le contenu verticalement */
+    justify-content: space-around; /* Répartir les éléments uniformément */
+}
+
+#details-evenement img {
+    width: 40%; /* Ajusté pour un meilleur équilibre visuel */
+    max-width: 200px; /* Limite de taille */
+    height: auto; /* Conserve le ratio d'aspect */
+    border-radius: 10px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#details-evenement button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#details-evenement button:hover {
+    background-color: #0056b3;
+}
+
+
+  
+  
+  
