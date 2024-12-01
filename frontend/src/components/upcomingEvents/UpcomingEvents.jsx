@@ -11,8 +11,7 @@ export default function UpcomingEvents() {
         <img src="../../../image/sport3.jpeg" alt="" />
         <img src="../../../image/sport1.jpeg" alt="" />
         <img src="../../../image/sport2.jpeg" alt="" />
-        <img src="../../../image/sport1.jpeg" alt="" />
-        <img src="../../../image/sport2.jpeg" alt="" />
+        
     </div>
   )
 }
