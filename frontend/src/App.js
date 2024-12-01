@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Eventparticipation from './Eventparticipation';  
+import Eventparticipation from './eventParticipation/Eventparticipation';  
 
 
 function App() {

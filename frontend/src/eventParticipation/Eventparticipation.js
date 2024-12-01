@@ -70,7 +70,7 @@ export default function EventParticipation() {
 
                 <section id="details-evenement">
                     <div className="upper-section">
-                        <img src="cosmoNightt.jpeg" alt="image de l'événement" />
+                        <img src="./images/cosmoNightt.jpeg" alt="image de l'événement" />
                         <div className="event-info">
                             <h2>COSMONIGHT</h2>
                             <p>02/11/2024</p>
