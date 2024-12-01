@@ -5,6 +5,7 @@ const schemaEvenement = new mongoose.Schema({
   description: { type: String, required: true }, // Description de l'événement
   date: { type: Date, required: true }, // Date de l'événement
   lieu: { type: String, required: true }, // Lieu de l'événement
+  image: { type: String, required: true },
   club: { type: mongoose.Schema.Types.ObjectId, ref: 'Club' }, // Club organisateur
   participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Etudiant' }], // Liste des participants
 });
