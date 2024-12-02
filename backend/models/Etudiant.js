@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const bcrypt = require('bcrypt');
 
 const etudiantSchema = new mongoose.Schema({
   nom: { type: String, required: true },
@@ -18,9 +17,9 @@ const etudiantSchema = new mongoose.Schema({
 });
 
 // Middleware pour hasher le mot de passe avant de l'enregistrer
-etudiantSchema.pre('save', async function(next) {
-  if (this.isModified('motDePasse') || this.isNew) {
-    this.motDePasse = await bcrypt.hash(this.motDePasse, 10);  // Hachage du mot de passe
+etudiantSchema.pre("save", async function (next) {
+  if (this.isModified("motDePasse") || this.isNew) {
+    this.motDePasse = await bcrypt.hash(this.motDePasse, 10); // Hachage du mot de passe
   }
   next();
 });
@@ -28,9 +27,9 @@ etudiantSchema.pre('save', async function(next) {
 // Modèle d'Etudiant
 
 // Middleware pour hasher le mot de passe avant de l'enregistrer
-etudiantSchema.pre('save', async function(next) {
-  if (this.isModified('motDePasse') || this.isNew) {
-    this.motDePasse = await bcrypt.hash(this.motDePasse, 10);  // Hachage du mot de passe
+etudiantSchema.pre("save", async function (next) {
+  if (this.isModified("motDePasse") || this.isNew) {
+    this.motDePasse = await bcrypt.hash(this.motDePasse, 10); // Hachage du mot de passe
   }
   next();
 });
