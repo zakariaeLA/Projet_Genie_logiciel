@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config({ path: "./config/.env" });
+const forumRoutes = require("./routes/forumRoutes");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -16,6 +17,13 @@ mongoose
   .connect(uri)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log("Error connecting to MongoDB:", err));
+
+
+
+
+
+// Utiliser les routes du forum
+app.use("/api", forumRoutes);
 
 // Démarrer le serveur
 app.listen(port, () => {
