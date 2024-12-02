@@ -20,6 +20,7 @@ db.once("open", async () => {
     prenom: "Aya",
     email: "aya.kandoussi@enim.ac.ma",
     motDePasse: "sesame",
+    profilePic:"blabla",
     clubs: [],
     evenementsParticipes: [],
     evenementsAVenir: [],
