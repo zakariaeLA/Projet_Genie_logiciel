@@ -1,15 +1,24 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const eventsRouter = require('./routes/events');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware pour parser le JSON
-app.use(express.json());
+// Middleware
+app.use(bodyParser.json()); // Pour parser les requêtes JSON
 
-// Importer les routes des événements
-const eventRoutes = require('./routes/events');
+// Connexion à MongoDB
+mongoose.connect('mongodb://localhost/gestion_parascolaire', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => console.log('Connexion à MongoDB réussie'))
+.catch(err => console.error('Erreur de connexion à MongoDB:', err));
 
-// Utiliser les routes pour les événements
-app.use('/api/events', eventRoutes);
+// Routes
+app.use('/api/events', eventsRouter);
 
 // Démarrer le serveur
 app.listen(PORT, () => {
