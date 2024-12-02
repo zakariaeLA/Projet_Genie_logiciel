@@ -3,15 +3,18 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 const mongoose = require("mongoose");
+const Etudiant = require("../models/Etudiant");
 
 // Route de connexion
 router.post("/connexion", async (req, res) => {
   const { email, motDePasse } = req.body;
+  const etudiants = await Etudiant.find();
+  console.log("Tous les étudiants :", etudiants);
 
   try {
     console.log("Email reçu :", email);
-    Etudiant.findOne({ email: email });
-    console.log("Etudiant trouvé : email");
+    const etudiant = await Etudiant.findOne({ email: email });
+    console.log("Etudiant trouvé :", etudiant);
 
     if (!etudiant) {
       return res
@@ -19,6 +22,8 @@ router.post("/connexion", async (req, res) => {
         .json({ message: "Email ou mot de passe incorrect." });
     }
 
+    console.log("Mot de passe reçu :", motDePasse);
+    console.log("Mot de passe dans la base :", etudiant.motDePasse);
     // Vérification du mot de passe
     const motDePasseValide = await bcrypt.compare(
       motDePasse,
@@ -37,7 +42,10 @@ router.post("/connexion", async (req, res) => {
 
     return res.status(200).json({ token, message: "Connexion réussie." });
   } catch (error) {
-    return res.status(500).json({ message: "Erreur serveur.", error });
+    console.error("Erreur lors de la connexion :", error);
+    return res
+      .status(500)
+      .json({ message: "Erreur serveur.", error: error.message });
   }
 });
 
