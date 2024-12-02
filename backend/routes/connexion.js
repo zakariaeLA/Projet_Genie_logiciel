@@ -9,12 +9,9 @@ const Etudiant = require("../models/Etudiant");
 router.post("/connexion", async (req, res) => {
   const { email, motDePasse } = req.body;
   const etudiants = await Etudiant.find();
-  console.log("Tous les étudiants :", etudiants);
 
   try {
-    console.log("Email reçu :", email);
     const etudiant = await Etudiant.findOne({ email: email });
-    console.log("Etudiant trouvé :", etudiant);
 
     if (!etudiant) {
       return res
@@ -22,8 +19,6 @@ router.post("/connexion", async (req, res) => {
         .json({ message: "Email ou mot de passe incorrect." });
     }
 
-    console.log("Mot de passe reçu :", motDePasse);
-    console.log("Mot de passe dans la base :", etudiant.motDePasse);
     // Vérification du mot de passe
     const motDePasseValide = await bcrypt.compare(
       motDePasse,
