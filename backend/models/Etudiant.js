@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
+// Définition du schéma
 const etudiantSchema = new mongoose.Schema({
   nom: { type: String, required: true },
   prenom: { type: String, required: true },
@@ -18,32 +19,12 @@ const etudiantSchema = new mongoose.Schema({
 
 // Middleware pour hasher le mot de passe avant de l'enregistrer
 etudiantSchema.pre("save", async function (next) {
-  if (this.isModified("motDePasse") || this.isNew) {
+  if (this.isModified("motDePasse")) {
     this.motDePasse = await bcrypt.hash(this.motDePasse, 10); // Hachage du mot de passe
   }
   next();
 });
 
-// Modèle d'Etudiant
-
-// Middleware pour hasher le mot de passe avant de l'enregistrer
-etudiantSchema.pre("save", async function (next) {
-  if (this.isModified("motDePasse") || this.isNew) {
-    this.motDePasse = await bcrypt.hash(this.motDePasse, 10); // Hachage du mot de passe
-  }
-  next();
-});
-
-// Modèle d'Etudiant
-
-// Middleware pour hasher le mot de passe avant de l'enregistrer
-etudiantSchema.pre("save", async function (next) {
-  if (this.isModified("motDePasse") || this.isNew) {
-    this.motDePasse = await bcrypt.hash(this.motDePasse, 10); // Hachage du mot de passe
-  }
-  next();
-});
-
-// Modèle d'Etudiant
-
-module.exports = mongoose.model("Etudiant", etudiantSchema);
+// Vérifier si le modèle a déjà été défini pour éviter OverwriteModelError
+module.exports =
+  mongoose.models.Etudiant || mongoose.model("Etudiant", etudiantSchema);
