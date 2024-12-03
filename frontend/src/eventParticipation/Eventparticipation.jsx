@@ -65,10 +65,10 @@ export default function EventParticipation() {
 
     const daysInMonth = getDaysInMonth(currentMonth, currentYear);
 
-    // Generate the calendar dates
+    
     const dates = [];
 
-    // Previous month's dates
+    
     for (let i = firstDayOfMonth - 1; i >= 0; i--) {
         dates.push({
             day: daysInPrevMonth - i,
@@ -76,7 +76,7 @@ export default function EventParticipation() {
         });
     }
 
-    // Current month's dates
+    
     for (let i = 1; i <= daysInMonth; i++) {
         const dateObj = new Date(currentYear, currentMonth, i);
         const event = events.find(
@@ -93,7 +93,7 @@ export default function EventParticipation() {
         });
     }
 
-    // Fill the rest of the calendar with next month's dates
+    
     while (dates.length % 7 !== 0) {
         dates.push({
             day: dates.length - daysInMonth - firstDayOfMonth + 1,
@@ -116,14 +116,14 @@ export default function EventParticipation() {
     return (
         <div className="participation-body">
             <header>
-                <h1>Event Calendar</h1>
+                <h1>CALENDRIER</h1>
             </header>
             <main>
                 <section id="calendrier">
                     <div className="calendar-header">
                         <button onClick={prevMonth}>&lt;</button>
                         <span>
-              {new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })}
+              {new Date(currentYear, currentMonth).toLocaleString('fr', { month: 'long' })}
             </span>
                         <button onClick={nextMonth}>&gt;</button>
                     </div>
@@ -174,9 +174,9 @@ export default function EventParticipation() {
                         <div className="upper-section">
                             <img src={selectedEvent.image} alt="image de l'événement" />
                             <div className="event-info">
-                                <h2>{selectedEvent.title}</h2>
+                                <h2>{selectedEvent.titre}</h2>
                                 <p>{selectedEvent.date.toLocaleDateString()}</p>
-                                <p>{selectedEvent.location}</p>
+                                <p>{selectedEvent.lieu}</p>
                             </div>
                         </div>
                         <p className="description">{selectedEvent.description}</p>
