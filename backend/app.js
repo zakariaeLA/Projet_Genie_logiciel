@@ -3,7 +3,13 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const eventsRouter = require('./routes/creation et obtention');
 require("dotenv").config({ path: "./config/.env" });
+const cors = require('cors');
 const app = express();
+
+
+
+// Allow all CORS requests
+app.use(cors());
 const PORT = process.env.PORT || 3000;
 
 // Middleware
