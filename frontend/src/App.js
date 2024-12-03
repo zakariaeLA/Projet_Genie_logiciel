@@ -7,9 +7,10 @@ import EventHistory from './components/eventHistory/EventHistory'
 function App() {
   const [value, setValue] = React.useState('1');
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
   return (
     <div
       className="App"

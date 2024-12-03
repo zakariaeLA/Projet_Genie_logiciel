@@ -1,25 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './upcomingEvents.css';
 
 export default function UpcomingEvents() {
-  const images = [
-    { src: '../../../image/forum1.jpeg', description: '07 Février | 10h00 - Rencontre avec le Ministre de l’Industrie.' },
-    { src: '../../../image/sport3.jpeg', description: '12 Février | 19h00 - Soirée musicale pour une bonne cause.' },
-    { src: '../../../image/Sport2.jpeg', description: '18 Février | 21h00 - Compétition de DJs.' },
-    { src: '../../../image/Histo5.jpeg', description: '14 Mars | 15h30 - Conférence sur l’innovation entrepreneuriale.' },
-    { src: '../../../image/Histo1.jpeg', description: '27 Décembre | 18h00 - Soirée cinéma : Spirited Away.' },
-    { src: '../../../image/ben1.jpeg', description: '27-28 Janvier | Toute la journée - Caravane socio-médicale.' },
-  ];
+  // State to store the items fetched from the API
+  const [items, setItems] = useState([]);
+
+  // Fetch data from the API when the component mounts
+  useEffect(() => {
+    fetch('http://localhost:8000/api/evenmentAVenir')
+      .then((response) => response.json())
+      .then((data) => setItems(data))  // Store the fetched data
+      .catch((error) => console.error('Error fetching items:', error));
+  }, []);
 
   return (
     <div className="UpcomingEvents_container">
-      {images.map((img, index) => (
-        <div className="img-container" key={index}>
-          <img src={img.src} alt={`Image ${index + 1}`} />
-          <div className="description">{img.description}</div>
+      {items.map((item) => (
+        <div className="img-container" key={item.id}>
+          <img src={`http://localhost:8000/api/images/${item.imageurl}`} alt={`Image ${item.id}`} />
+          <div className="description">{item.titre} - {item.date} <br /> {item.description}</div>
         </div>
       ))}
     </div>
   );
 }
-
