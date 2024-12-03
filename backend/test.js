@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
-const Etudiant = require("../models/Etudiant.js"); // Chemin vers ton modèle Étudiant
-const Evenement = require("../models/Evenement.js"); // Chemin vers ton modèle Evenement
-const Club = require("./models/Club.js"); // Chemin vers ton modèle Club
+const Etudiant = require("./models/Etudiant.js"); // Modèle Étudiant
+const Evenement = require("./models/Evenement.js"); // Modèle Evenement
+const Club = require("./models/Club.js"); // Modèle Club
 
 // Connexion à MongoDB
 mongoose.connect(
@@ -15,18 +15,17 @@ mongoose.connect(
 const db = mongoose.connection;
 db.once("open", async () => {
   console.log("Connecté à MongoDB pour le test.");
-  try {
 
-      // Récupérer les événements existants
-      const evenement1 = await Evenement.findOne({ titre: "Conférence sur la technologie" });
-      const evenement2 = await Evenement.findOne({ titre: "Atelier de programmation" });
-      
-      // Vérifier si les événements existent
-      if (!evenement1 || !evenement2) {
-        console.log("Certains événements n'ont pas été trouvés.");
-        return;
-      }
-  
+  try {
+    // Récupérer les clubs existants
+    const club1 = await Club.findOne({ nom: "Bénévolat" });
+    const club2 = await Club.findOne({ nom: "Tech Innovators" });
+
+    if (!club1 || !club2) {
+      console.log("Certains clubs n'ont pas été trouvés.");
+      return;
+    }
+
     // Récupérer les étudiants existants
     const etudiant1 = await Etudiant.findOne({ email: "zakariae.lachhab@enim.ac.ma" });
     const etudiant2 = await Etudiant.findOne({ email: "aya.bouchama@enim.ac.ma" });
@@ -37,34 +36,49 @@ db.once("open", async () => {
       return;
     }
 
-    // Récupérer les clubs existants
-    const club1 = await Club.findOne({ nom: "Bénévolat" });
-    const club2 = await Club.findOne({ nom: "Tech Innovators" });
+    // Création du premier événement
+    const evenement3 = new Evenement({
+      titre: "Entrepreneurial Exchange HuB",
+      description: "Bridging students and industry Leaders",
+      date: new Date("2024-05-01"),
+      lieu: "Salle A, Université X",
+      image: "https://github.com/zakariaeLA/Gestion_Parascolaire/blob/feature/PageEvenementFront/frontend/public/image/Histo5.jpeg",
+      club: club1._id, // Associe l'événement au club "Bénévolat"
+      participants: [etudiant1._id, etudiant2._id], // Associe les étudiants en tant que participants
+    });
 
-    // Vérifier si les clubs existent
-    if (!club1 || !club2) {
-      console.log("Certains clubs n'ont pas été trouvés.");
-      return;
-    }
+    // Création du deuxième événement
+    const evenement4 = new Evenement({
+      titre: "Atelier de programmation",
+      description: "Un atelier pour apprendre à coder.",
+      date: new Date("2024-06-01"),
+      lieu: "Salle B, Université Y",
+      image: "https://github.com/zakariaeLA/Gestion_Parascolaire/blob/feature/PageEvenementFront/frontend/public/image/mead1.jpeg",
+      club: club2._id, // Associe l'événement au club "Tech Innovators"
+      participants: [etudiant1._id, etudiant3._id], // Associe les étudiants en tant que participants
+    });
 
-    // Mettre à jour les étudiants avec les événements passés et à venir
-    etudiant1.evenementsParticipes.push(evenement1._id); // Ajouter à l'événement passé
-    etudiant1.evenementsAVenir.push(evenement2._id); // Ajouter à l'événement à venir
-    etudiant2.evenementsParticipes.push(evenement1._id); // Ajouter à l'événement passé
-    etudiant2.evenementsAVenir.push(evenement2._id); // Ajouter à l'événement à venir
-    etudiant3.evenementsParticipes.push(evenement1._id); // Ajouter à l'événement passé
-    etudiant3.evenementsAVenir.push(evenement2._id); // Ajouter à l'événement à venir
+    // Sauvegarde des événements dans la base de données
+    const savedEvenement3 = await evenement3.save();
+    const savedEvenement4 = await evenement4.save();
 
-    // Sauvegarder les modifications des étudiants
-    const updatedEtudiant1 = await etudiant1.save();
-    const updatedEtudiant2 = await etudiant2.save();
-    const updatedEtudiant3 = await etudiant3.save();
+    console.log("Événements créés :", savedEvenement3, savedEvenement4);
 
-    console.log("Étudiants modifiés :", updatedEtudiant1, updatedEtudiant2, updatedEtudiant3);
+    // Mise à jour des étudiants avec les événements participés et à venir
+    etudiant1.evenementsParticipes.push(savedEvenement3._id);
+    etudiant1.evenementsAVenir.push(savedEvenement4._id);
+    etudiant2.evenementsParticipes.push(savedEvenement3._id);
+    etudiant3.evenementsAVenir.push(savedEvenement4._id);
 
+    // Sauvegarde des modifications des étudiants
+    await etudiant1.save();
+    await etudiant2.save();
+    await etudiant3.save();
+
+    console.log("Étudiants mis à jour avec succès !");
   } catch (error) {
-    console.error("Erreur lors de la mise à jour des étudiants :", error.message);
+    console.error("Erreur lors de l'exécution :", error.message);
   } finally {
-    db.close(); // Ferme la connexion
+    db.close(); // Fermer la connexion
   }
 });
