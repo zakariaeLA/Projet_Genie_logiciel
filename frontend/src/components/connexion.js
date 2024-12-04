@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./connexion.css";
+import "../styles/connexion.css";
 
 const Connexion = () => {
   const [email, setEmail] = useState("");
