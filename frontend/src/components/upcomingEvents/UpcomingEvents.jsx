@@ -7,9 +7,9 @@ export default function UpcomingEvents() {
 
   // Fetch data from the API when the component mounts
   useEffect(() => {
-    fetch('http://localhost:8000/api/evenmentAVenir')
+    fetch('http://localhost:8000/api/etudiants/67508266533eb41d8194ded0/evenements')
       .then((response) => response.json())
-      .then((data) => setItems(data))  // Store the fetched data
+      .then((data) => setEvents(data.evenementsAVenir)) // Extract 'evenementsParticipes'
       .catch((error) => console.error('Error fetching items:', error));
   }, []);
 
@@ -17,7 +17,7 @@ export default function UpcomingEvents() {
     <div className="UpcomingEvents_container">
       {items.map((item) => (
         <div className="img-container" key={item.id}>
-          <img src={`http://localhost:8000/api/images/${item.imageurl}`} alt={`Image ${item.id}`} />
+          <img src={`http://localhost:8000/imagesEvenement/${item.imageurl}} alt={Image ${item.id}`} />
           <div className="description">{item.titre} - {item.date} <br /> {item.description}</div>
         </div>
       ))}

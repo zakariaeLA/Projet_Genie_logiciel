@@ -1,22 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './eventHistory.css';
 
-export default function EventHistory() {
-  const images = [
-    { src: '../../../image/masjid1.jpeg', description: '20 Janvier | 14h00 - أمسية قرآنية لاختتام فعاليات المهرجان القرآني في نسخته الحادية عشرة' },
-    { src: '../../../image/mead1.jpeg', description: '25 Février | 16h00 - Découvrez notre nouveau film « The Legend of Mines Leaders 09 », une expérience cinématographique unique à ne pas manquer!' },
-    { src: '../../../image/Sport1.jpeg', description: '18 Mars | 09h00 - Participez à une aventure captivante de laser tag et relevez le défi avec votre équipe!' },
-    { src: '../../../image/make1.jpeg', description: '05 Avril | 10h00 - La 7ᵉ édition du Moroccan Robotics Challenge vous attend. Soyez prêt à innover!' },
-    { src: '../../../image/astro1.jpeg', description: '10 Mai | 20h00 - Pour la 4ᵉ édition de Cosmelody, découvrez des conférences fascinantes sur l’astronomie et les sciences.' },
-    { src: '../../../image/energ1.jpeg', description: '15 Juin | 11h00 - L’IA et les énergies renouvelables : un mariage parfait pour un avenir durable.' },
-  ];
+export default function eventHistory() {
+  // State to store the items fetched from the API
+  const [items, setItems] = useState([]);
+
+  // Fetch data from the API when the component mounts
+  useEffect(() => {
+    fetch('http://localhost:8000/api/etudiants/67508266533eb41d8194ded0/evenements')
+      .then((response) => response.json())
+      .then((data) => setEvents(data.evenementsParticipes)) // Extract 'evenementsParticipes'
+      .catch((error) => console.error('Error fetching items:', error));
+  }, []);
 
   return (
     <div className="EventHistory_container">
-      {images.map((img, index) => (
-        <div className="img-container" key={index}>
-          <img src={img.src} alt={`Image ${index + 1}`} />
-          <div className="description">{img.description}</div>
+      {items.map((item) => (
+        <div className="img-container" key={item.id}>
+          <img src={`http://localhost:8000/imagesEvenement/${item.imageurl}} alt={Image ${item.id}`} />
+          <div className="description">{item.titre} - {item.date} <br /> {item.description}</div>
         </div>
       ))}
     </div>
