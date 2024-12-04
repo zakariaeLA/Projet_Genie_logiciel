@@ -1,5 +1,7 @@
 const express = require('express');
 const Etudiant = require('../models/Etudiant'); // Modèle Etudiant
+const Evenement = require('../models/Evenement');
+const path = require('path');
 const router = express.Router();
 
 // Récupérer uniquement les événements participés et à venir d’un étudiant
@@ -9,11 +11,11 @@ router.get('/:id/evenements', async (req, res) => {
       .select('evenementsParticipes evenementsAVenir') // Sélectionner uniquement les champs des événements
       .populate({
         path: 'evenementsParticipes',
-        select: ' image', // Sélectionner uniquement les champs nécessaires
+        select: 'description image', // Sélectionner uniquement les champs nécessaires
       })
       .populate({
         path: 'evenementsAVenir',
-        select: 'image', // Sélectionner uniquement les champs nécessaires
+        select: 'description image', // Sélectionner uniquement les champs nécessaires
       });
 
     if (!etudiant) {
@@ -22,12 +24,12 @@ router.get('/:id/evenements', async (req, res) => {
 
     res.json({
       evenementsParticipes: etudiant.evenementsParticipes.map((event) => ({
-        image: event.image, // URL de l'image
-        titre: event.titre, // (Optionnel) Nom de l'événement
+        image: event.image ? `/images/${event.image}` : null, // URL de l'image
+        description: event.description,
       })),
       evenementsAVenir: etudiant.evenementsAVenir.map((event) => ({
-        image: event.image, // URL de l'image
-        titre: event.titre, // (Optionnel) Nom de l'événement
+        image: event.image ? `/images/${event.image}` : null, // URL de l'image
+        description: event.description,
       })),
     });
   } catch (error) {
