@@ -1,8 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const connexionRoute = require("./routes/connexion");
 const mongoose = require("mongoose");
+const connexionRoute = require("./routes/connexion");
+const profilRoutes = require("./routes/profil");
+
+
 require("dotenv").config({ path: "./config/.env" });
 
 const port = process.env.PORT || 5000;
@@ -15,6 +18,7 @@ app.use(express.json());
 
 // Utilisation de la route de connexion
 app.use("/api", connexionRoute);
+app.use("/api/profil", profilRoutes);
 
 // Connexion à MongoDB Atlas
 const uri = process.env.MONGO_URI;
