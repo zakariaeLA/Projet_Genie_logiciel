@@ -8,6 +8,7 @@ const schemaEvenement = new mongoose.Schema({
   image: { type: String, required: true },
   club: { type: mongoose.Schema.Types.ObjectId, ref: 'Club' }, // Club organisateur
   participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Etudiant' }], // Liste des participants
+  statut: { type: String, enum: ['en attente', 'approuvé', 'refusé'], default: 'en attente' },
 });
 
 module.exports = mongoose.model('Evenement', schemaEvenement);
