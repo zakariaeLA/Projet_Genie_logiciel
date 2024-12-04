@@ -16,11 +16,11 @@ const port = 8000;
 app.use(cors()); // This allows all origins by default
 
 // Serve static files (images) from the 'public/images' folder
-app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
+app.use('/images', express.static(path.join(__dirname, 'public', 'imagesEvenement')));
 // Route to serve an image based on its filename
 app.get('/api/images/:imageName', (req, res) => {
     const imageName = req.params.imageName;
-    const imagePath = path.join(__dirname, 'public', 'images', imageName);
+    const imagePath = path.join(__dirname, 'public', 'imagesEvenement', imageName);
     res.sendFile(imagePath, (err) => {
         if (err) {
             res.status(404).send('Image not found');

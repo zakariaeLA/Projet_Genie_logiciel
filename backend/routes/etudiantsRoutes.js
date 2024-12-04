@@ -24,11 +24,11 @@ router.get('/:id/evenements', async (req, res) => {
 
     res.json({
       evenementsParticipes: etudiant.evenementsParticipes.map((event) => ({
-        image: event.image ? `/images/${event.image}` : null, // URL de l'image
+        image: event.image ? `/imagesEvenement/${event.image}` : null, // URL de l'image
         description: event.description,
       })),
       evenementsAVenir: etudiant.evenementsAVenir.map((event) => ({
-        image: event.image ? `/images/${event.image}` : null, // URL de l'image
+        image: event.image ? `/imagesEvenement/${event.image}` : null, // URL de l'image
         description: event.description,
       })),
     });
