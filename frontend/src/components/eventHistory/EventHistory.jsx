@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './eventHistory.css';
 
-export default function eventHistory() {
+export default function EventHistory() {
   // State to store the items fetched from the API
-  const [items, setItems] = useState([]);
+  const [items, setEvents] = useState([]);
 
   // Fetch data from the API when the component mounts
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function eventHistory() {
     <div className="EventHistory_container">
       {items.map((item) => (
         <div className="img-container" key={item.id}>
-          <img src={`http://localhost:8000/imagesEvenement/${item.imageurl}} alt={Image ${item.id}`} />
+          <img src={`http://localhost:8000/imagesEvenement/histo5.jpeg${item.imageurl}`} alt={`Image ${item.id}`} />
           <div className="description">{item.titre} - {item.date} <br /> {item.description}</div>
         </div>
       ))}

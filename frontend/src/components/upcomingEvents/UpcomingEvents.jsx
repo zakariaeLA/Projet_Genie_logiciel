@@ -3,7 +3,7 @@ import './upcomingEvents.css';
 
 export default function UpcomingEvents() {
   // State to store the items fetched from the API
-  const [items, setItems] = useState([]);
+  const [items, setEvents] = useState([]);
 
   // Fetch data from the API when the component mounts
   useEffect(() => {
@@ -17,7 +17,8 @@ export default function UpcomingEvents() {
     <div className="UpcomingEvents_container">
       {items.map((item) => (
         <div className="img-container" key={item.id}>
-          <img src={`http://localhost:8000/imagesEvenement/${item.imageurl}} alt={Image ${item.id}`} />
+          <img src={`http://localhost:8000/imagesEvenement/histo5.jpeg${item.image}`} alt={`Image ${item.id}`} />
+
           <div className="description">{item.titre} - {item.date} <br /> {item.description}</div>
         </div>
       ))}
