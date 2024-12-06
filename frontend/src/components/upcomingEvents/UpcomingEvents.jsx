@@ -17,8 +17,10 @@ export default function UpcomingEvents() {
     <div className="UpcomingEvents_container">
       {items.map((item) => (
         <div className="img-container" key={item.id}>
-          <img src={`http://localhost:8000/imagesEvenement/histo5.jpeg${item.image}`} alt={`Image ${item.id}`} />
-
+          <img 
+            src={`http://localhost:8000${item.image}`} 
+            alt={`Image ${item.id}`} 
+          />
           <div className="description">{item.titre} - {item.date} <br /> {item.description}</div>
         </div>
       ))}
