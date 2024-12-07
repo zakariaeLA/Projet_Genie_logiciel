@@ -1,8 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const connexionRoute = require("./routes/connexion");
 const mongoose = require("mongoose");
+const connexionRoute = require("./routes/connexion");
+const profilRoutes = require("./routes/profil");
+const path = require("path");
+const authMiddleware = require('./middlewares/auth');
+
 require("dotenv").config({ path: "./config/.env" });
 
 const port = process.env.PORT || 5000;
@@ -12,9 +16,13 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Utilisation de la route de connexion
+// Routes publiques (non protégées par JWT)
 app.use("/api", connexionRoute);
+
+// Routes protégées (nécessitent une authentification)
+app.use("/api", authMiddleware, profilRoutes); // Applique le middleware auth avant profilRoutes
 
 // Connexion à MongoDB Atlas
 const uri = process.env.MONGO_URI;
@@ -31,4 +39,3 @@ app.listen(port, () => {
 app.get("/", (req, res) => {
   res.send("Backend is working and connected to MongoDB!");
 });
-

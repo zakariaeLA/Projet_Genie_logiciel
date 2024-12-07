@@ -18,6 +18,7 @@ const Connexion = () => {
       });
 
       if (response.status === 200) {
+        localStorage.setItem("token", response.data.token);
         setMessage("Connexion réussie !");
         console.log("Token reçu :", response.data.token);
       }
