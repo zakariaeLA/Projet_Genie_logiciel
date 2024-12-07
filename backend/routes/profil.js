@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const profilController = require("../controllers/profilController");
 const authMiddleware = require("../middlewares/auth"); // Assurez-vous d'importer le middleware
+const upload = require("../middlewares/upload"); // Middleware Multer
 
 // Route GET pour afficher le profil (protégée par authentification)
 router.get("/profil", authMiddleware, profilController.afficherProfil);
@@ -10,7 +11,14 @@ router.get("/profil", authMiddleware, profilController.afficherProfil);
 router.put("/profil/updatePassword", authMiddleware, profilController.mettreAJourMotDePasse);
 
 // Route POST pour uploader une photo de profil (protégée par authentification)
-router.post("/profil/upload", authMiddleware, profilController.mettreAJourPhotoProfil);
+//router.post("/profil/upload", authMiddleware, profilController.mettreAJourPhotoProfil);
 
+router.put(
+    "/profil/upload",
+    authMiddleware, // Vérifie l'authentification
+    upload.single("photo"), // Accepte un fichier sous le champ "photo"
+    profilController.modifierPhotoDeProfil
+  );
+  
 
 module.exports = router;

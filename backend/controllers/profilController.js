@@ -1,6 +1,8 @@
 const Etudiant = require("../models/Etudiant");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const upload = require("../middlewares/upload"); // Importer Multer
+
 
 // Afficher le profil
 exports.afficherProfil = async (req, res) => {
@@ -45,19 +47,29 @@ exports.mettreAJourMotDePasse = async (req, res) => {
   }
 };
 
-// Uploader une photo de profil
-exports.mettreAJourPhotoProfil = async (req, res) => {
+
+// Mettre à jour ou initialiser la photo de profil
+exports.modifierPhotoDeProfil = async (req, res) => {
   try {
-    // Utilisation de req.user.id
     const etudiant = await Etudiant.findById(req.user.id);
     if (!etudiant) {
       return res.status(404).json({ message: "Étudiant non trouvé." });
     }
 
-    etudiant.profilePic = req.file.filename;
+    if (!req.file) {
+      return res.status(400).json({ message: "Aucune image fournie." });
+    }
+
+    // Mettre à jour la photo de profil avec le chemin du fichier
+    etudiant.profilePic = req.file.path;
     await etudiant.save();
-    res.status(200).json({ message: "Photo de profil mise à jour." });
+
+    res.status(200).json({
+      message: "Photo de profil mise à jour avec succès.",
+      profilePic: etudiant.profilePic,
+    });
   } catch (error) {
-    res.status(500).json({ message: "Erreur serveur." });
+    console.error(error);
+    res.status(500).json({ message: "Erreur serveur lors de la mise à jour de la photo de profil." });
   }
 };

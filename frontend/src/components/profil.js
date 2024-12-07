@@ -7,20 +7,20 @@ const Profil = () => {
     nom: "",
     prenom: "",
     email: "",
-    profilePic: "",
+    profilePic: "", // URL de la photo de profil
   });
   const [nouveauMotDePasse, setNouveauMotDePasse] = useState("");
   const [motDePasseActuel, setMotDePasseActuel] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [message, setMessage] = useState("");
-  const [isPasswordChangeVisible, setIsPasswordChangeVisible] = useState(false); // État pour afficher/masquer le formulaire de changement de mot de passe
+  const [isPasswordChangeVisible, setIsPasswordChangeVisible] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:5000/api/profil",{
-          headers: { Authorization: Bearer {token} } ,
+        const response = await axios.get("http://localhost:5000/api/profil", {
+          headers: { Authorization: `Bearer ${token}` },
         });
         setUserData(response.data);
       } catch (error) {
@@ -41,34 +41,29 @@ const Profil = () => {
           motDePasseActuel,
           nouveauMotDePasse,
         },
-        { headers: { Authorization: Bearer ${token} } }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       setMessage(response.data.message);
-      setIsPasswordChangeVisible(false); // Fermer le formulaire après mise à jour
+      setIsPasswordChangeVisible(false);
     } catch (error) {
       console.error("Erreur lors de la mise à jour du mot de passe:", error);
       setMessage("Erreur lors de la mise à jour du mot de passe.");
     }
   };
 
-  const handleFileUpload = async (e) => {
+  const handleProfilePicUpload = async (e) => {
     e.preventDefault();
-    if (!selectedFile) {
-      setMessage("Veuillez sélectionner un fichier à téléverser.");
-      return;
-    }
-
     const formData = new FormData();
-    formData.append("profilePic", selectedFile);
+    formData.append("photo", selectedFile);
 
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post(
+      const response = await axios.put(
         "http://localhost:5000/api/profil/upload",
         formData,
         {
           headers: {
-            Authorization: Bearer ${token},
+            Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }
@@ -77,10 +72,13 @@ const Profil = () => {
         ...prevData,
         profilePic: response.data.profilePic,
       }));
-      setMessage(response.data.message);
+      setMessage("Photo de profil mise à jour avec succès.");
     } catch (error) {
-      console.error("Erreur lors du téléversement de l'image:", error);
-      setMessage("Erreur lors du téléversement de l'image.");
+      console.error(
+        "Erreur lors de la mise à jour de la photo de profil:",
+        error
+      );
+      setMessage("Erreur lors de la mise à jour de la photo de profil.");
     }
   };
 
@@ -88,11 +86,21 @@ const Profil = () => {
     <div className="profil-container">
       <h1>Mon Profil</h1>
 
-      {/* Affichage de la photo de profil */}
+      {message && (
+        <p
+          className={`message ${
+            message.includes("Erreur") ? "error" : "success"
+          }`}
+        >
+          {message}
+        </p>
+      )}
+
+      {/* Photo de profil */}
       <div className="profile-pic-container">
         {userData.profilePic ? (
           <img
-            src={http://localhost:5000/uploads/${userData.profilePic}}
+            src={`http://localhost:5000/${userData.profilePic}`}
             alt="Profil"
             className="profile-pic"
           />
@@ -103,45 +111,47 @@ const Profil = () => {
             className="profile-pic"
           />
         )}
-        <label htmlFor="fileInput" className="change-photo-label">
-          <span>✏</span> Changer
-        </label>
-        <input
-          type="file"
-          id="fileInput"
-          style={{ display: "none" }}
-          onChange={(e) => setSelectedFile(e.target.files[0])}
-        />
+        <form onSubmit={handleProfilePicUpload}>
+          <input
+            type="file"
+            id="fileInput"
+            onChange={(e) => setSelectedFile(e.target.files[0])}
+          />
+          <button type="submit" disabled={!selectedFile}>
+            Mettre à jour la photo
+          </button>
+        </form>
       </div>
-
-      {message && <p className="message">{message}</p>}
-
-     
 
       {/* Informations du profil */}
-      <div>
-        <label>Nom:</label>
-        <input type="text" value={userData.nom} disabled />
-      </div>
-      <div>
-        <label>Prénom:</label>
-        <input type="text" value={userData.prenom} disabled />
-      </div>
-      <div>
-        <label>Email:</label>
-        <input type="email" value={userData.email} disabled />
+      <div className="profile-info">
+        <div className="info-item">
+          <span className="label">Nom : </span>
+          <span className="value">{userData.nom}</span>
+        </div>
+        <div className="info-item">
+          <span className="label">Prénom : </span>
+          <span className="value">{userData.prenom}</span>
+        </div>
+        <div className="info-item">
+          <span className="label">Email : </span>
+          <span className="value">{userData.email}</span>
+        </div>
       </div>
 
       {/* Bouton pour afficher/masquer le formulaire de changement de mot de passe */}
-      <button onClick={() => setIsPasswordChangeVisible(!isPasswordChangeVisible)}>
+      <button
+        onClick={() => setIsPasswordChangeVisible(!isPasswordChangeVisible)}
+      >
         Modifier le mot de passe
       </button>
 
       {/* Formulaire de modification du mot de passe */}
+      <div className="mdp">
       {isPasswordChangeVisible && (
         <form onSubmit={handleUpdatePassword}>
           <div>
-            <label>Mot de passe actuel:</label>
+
             <input
               type="password"
               placeholder="Mot de passe actuel"
@@ -150,7 +160,7 @@ const Profil = () => {
             />
           </div>
           <div>
-            <label>Nouveau mot de passe:</label>
+
             <input
               type="password"
               placeholder="Nouveau mot de passe"
@@ -161,7 +171,7 @@ const Profil = () => {
           <button type="submit">Mettre à jour le mot de passe</button>
         </form>
       )}
-
+      </div>
     </div>
   );
 };
