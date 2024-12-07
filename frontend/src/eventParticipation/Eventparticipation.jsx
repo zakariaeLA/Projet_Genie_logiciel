@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ParticipationEvent.css';
 import axios from 'axios';
-
+import imagevent from './images/cosmoNightt.jpeg';
 export default function EventParticipation() {
     const today = new Date();
     const [currentMonth, setCurrentMonth] = useState(today.getMonth());
@@ -172,10 +172,12 @@ export default function EventParticipation() {
                 {selectedEvent && (
                     <section id="details-evenement">
                         <div className="upper-section">
-                            <img src={selectedEvent.image} alt="image de l'événement" />
+                            
+                            {/* <img src={imagevent.image} alt="image de l'événement" /> */}
+                            <img src={imagevent} alt="image de l'événement" />
                             <div className="event-info">
                                 <h2>{selectedEvent.titre}</h2>
-                                <p>{selectedEvent.date.toLocaleDateString()}</p>
+                                <p>{selectedEvent.date.toLocaleDateString("fr")}</p>
                                 <p>{selectedEvent.lieu}</p>
                             </div>
                         </div>
