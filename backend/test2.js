@@ -46,10 +46,10 @@ const Etudiant = mongoose.model('Etudiant', etudiantSchema);
 
   // Créer un nouvel étudiant
   const etudiant = new Etudiant({
-    nom: "ziko",
-    prenom: "ziko",
-    email: "ziko@enim.ac.ma",
-    motDePasse: "ziko", // Le mot de passe non-haché
+    nom: "zaki1",
+    prenom: "zaki1",
+    email: "zaki1@enim.ac.ma",
+    motDePasse: "zaki1", // Le mot de passe non-haché
     pic: "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
   });
 

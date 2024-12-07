@@ -1,83 +1,120 @@
-/* src/components/Profile.css */
+/* Profil Container */
+.profil-container {
+  width: 80%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+/* Titre */
+.profil-container h1 {
+  text-align: center;
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Message d'alerte */
+.message {
+  color: #d9534f;
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.message.success {
+  color: #5bc0de;
+}
+
+/* Formulaires */
+form {
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+form div {
+  margin-bottom: 15px;
+}
+
+form label {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #333;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 5px;
+  box-sizing: border-box;
+}
+
+form input[type="file"] {
+  padding: 5px;
+}
+
+form button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}
+
+/* Photo de Profil */
+.profile-pic {
+  margin-top: 15px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+form .file-input-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* Champs de saisie désactivés */
+input:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
+
+/* Responsivité */
+@media (max-width: 768px) {
+  .profil-container {
+    width: 95%;
   }
-  
-  h2, h3 {
-    color: #333;
+
+  form input[type="text"],
+  form input[type="email"],
+  form input[type="password"] {
+    font-size: 0.9rem;
   }
-  
-  form {
-    margin-bottom: 30px;
+
+  form button {
+    font-size: 0.9rem;
   }
-  
-  label {
-    display: block;
-    margin: 10px 0 5px;
-    font-weight: bold;
-    color: #555;
-  }
-  
-  input[type="password"],
-  input[type="file"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    margin-bottom: 15px;
-  }
-  
-  input[type="password"]:focus,
-  input[type="file"]:focus {
-    border-color: #4a90e2;
-  }
-  
-  button {
-    padding: 10px 20px;
-    background-color: #4a90e2;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  button:hover {
-    background-color: #357ab7;
-  }
-  
-  button:disabled {
-    background-color: #b0c9e2;
-    cursor: not-allowed;
-  }
-  
-  img {
-    border-radius: 50%;
-    margin-top: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .file-upload-section {
-    margin-bottom: 30px;
-  }
-  
-  .information {
-    background-color: #e8f4f8;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 20px;
-  }
-  
-  .information p {
-    margin: 5px 0;
-    font-size: 16px;
-    color: #333;
-  }
-  
+}

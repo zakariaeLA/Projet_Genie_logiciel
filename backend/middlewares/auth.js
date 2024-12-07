@@ -11,8 +11,13 @@ module.exports = (req, res, next) => {
     // Vérification du token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded; // Ajout des données utilisateur à la requête
+
+    console.log("Utilisateur décodé:", req.user); // Log de l'utilisateur décodé (pour débogage)
+
     next(); // Passer au prochain middleware ou à la route
   } catch (error) {
+    console.error("Erreur lors de la vérification du token:", error); // Log de l'erreur
+
     return res.status(401).json({ message: 'Token invalide ou expiré.' });
   }
 };
