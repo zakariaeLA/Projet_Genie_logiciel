@@ -37,11 +37,17 @@ router.get('/:id/clubs', async (req, res) => {
         image: club.image ? `/imagesClubs/${club.image}` : null,
         nom: club.nom,
         filtre: club.filtre,
+        id: club.id,
+        description: club.description,
+        
       })),
       autresClubs: autresClubs.map((club) => ({
         image: club.image ? `/imagesClubs/${club.image}` : null,
         nom: club.nom,
         filtre: club.filtre,
+        id: club.id,
+        description: club.description,
+        
       })),
     };
 

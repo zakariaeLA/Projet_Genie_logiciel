@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Connexion from './connexion';
 import EvenementsAvenir from './components/upcomingEvents/UpcomingEvents.jsx' ;
 import EvenementsHistorique from './components/eventHistory/EventHistory';
+import ClubInfo from './pages/clubs/clubInfo.jsx';
 
 
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/evenementsavenir" element={<EvenementsAvenir/>} />
         <Route path="/evenementshistorique" element={<EvenementsHistorique/>} />
+        <Route path="/clubInfo/:clubId/:studentId" element={<ClubInfo/>} />
       </Routes>
     </Router>
   );
