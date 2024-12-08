@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import "./ClubInfo.css"; // Import the CSS file
+
 const descriptionMap = {
-    "Mines IT": "Mines IT est un club étudiant de l'École Nationale Supérieure des Mines de Rabat (ENSMR)qui se concentre sur le domaine de l'informatique et a pour mission de promouvoir les compétences technologiques parmi les étudiants de l'école.",
-    "Astronomines": "Astronomines est un club étudiant de l'École Nationale Supérieure des Mines de Rabat (ENSMR), dédié à la promotion des sciences et de l'astronomie. Ce club a pour objectif de sensibiliser les étudiants et le grand public aux enjeux astronomiques et scientifiques à travers diverses activités.",
-    "Alumni": "Le club ALUMNI de l'École Nationale Supérieure des Mines de Rabat (ENSMR) joue un rôle clé dans la vie professionnelle des anciens élèves. Cette association vise à maintenir un lien entre les diplômés et l'école, tout en favorisant le réseautage et le partage d'expériences professionnelles.",
-    "Bénévolat": "Enim bénévolat est un club de l'École Nationale des Mines de Rabat (ENIM) qui se consacre à des initiatives humanitaires et sociales.Enim Bénévolat est impliqué dans diverses actions sociales, telles que l'organisation de concerts de charité et les campagnes de don de sang.",
-    "Japamines": "Japamines est un club étudiant de l'École Nationale Supérieure des Mines de Rabat (ENSMR), axé sur la culture japonaise et l'apprentissage de la langue japonaise. Ce club vise à promouvoir la découverte et l'appréciation de la culture nippone parmi les étudiants, tout en offrant des activités variées.",
-    "Mines Leaders":"Mines Leaders est un club qui repousse les limites des sports mécaniques en concevant des véhicules innovants avec créativité, passion et une touche unique d’audace."
-    
-  };
+  "Mines IT":
+    "Mines IT est un club étudiant de l'École Nationale Supérieure des Mines de Rabat (ENSMR) qui se concentre sur le domaine de l'informatique et a pour mission de promouvoir les compétences technologiques parmi les étudiants de l'école.",
+  "Astronomines":
+    "Astronomines est un club étudiant de l'École Nationale Supérieure des Mines de Rabat (ENSMR), dédié à la promotion des sciences et de l'astronomie. Ce club a pour objectif de sensibiliser les étudiants et le grand public aux enjeux astronomiques et scientifiques à travers diverses activités.",
+  "Alumni":
+    "Le club ALUMNI de l'École Nationale Supérieure des Mines de Rabat (ENSMR) joue un rôle clé dans la vie professionnelle des anciens élèves. Cette association vise à maintenir un lien entre les diplômés et l'école, tout en favorisant le réseautage et le partage d'expériences professionnelles.",
+  "Bénévolat":
+    "Enim bénévolat est un club de l'École Nationale des Mines de Rabat (ENIM) qui se consacre à des initiatives humanitaires et sociales. Enim Bénévolat est impliqué dans diverses actions sociales, telles que l'organisation de concerts de charité et les campagnes de don de sang.",
+  "Japamines":
+    "Japamines est un club étudiant de l'École Nationale Supérieure des Mines de Rabat (ENSMR), axé sur la culture japonaise et l'apprentissage de la langue japonaise. Ce club vise à promouvoir la découverte et l'appréciation de la culture nippone parmi les étudiants, tout en offrant des activités variées.",
+  "Mines Leaders":
+    "Mines Leaders est un club qui repousse les limites des sports mécaniques en concevant des véhicules innovants avec créativité, passion et une touche unique d’audace."
+};
 
 export default function ClubInfo() {
   const { clubId, studentId } = useParams();
@@ -21,10 +28,10 @@ export default function ClubInfo() {
       .then((data) => {
         let foundClub = data.mesClubs.find((c) => c.id === clubId);
         if (foundClub) {
-            foundClub.description = descriptionMap[foundClub.nom];
+          foundClub.description = descriptionMap[foundClub.nom];
           setClub(foundClub);
           setStudentInClub(true);
-        } else {  
+        } else {
           foundClub = data.autresClubs.find((c) => c.id === clubId);
           if (foundClub) {
             foundClub.description = descriptionMap[foundClub.nom];
@@ -35,35 +42,32 @@ export default function ClubInfo() {
             setStudentInClub(false);
           }
         }
-
-        
-        
       })
       .catch((error) => console.error("Error fetching clubs:", error));
   }, [clubId, studentId]);
 
   return (
-    <div>
-      
-
+    <div className="club-info-container">
       {club ? (
-        <div>
-          <h2>{club.nom}</h2>
-          <img 
-            src={`http://localhost:3000${club.image}`} 
-            alt={`Image ${club.nom}`} 
-          />
-          <p>{club.description}</p>
+        <div className="club-card">
+          <h2 className="club-title">{club.nom}</h2>
+          <div className="club-image-container">
+            <img
+              src={`http://localhost:3000${club.image}`}
+              alt={`Image ${club.nom}`}
+              className="club-image"
+            />
+          </div>
+          <p className="club-description">{club.description}</p>
           {studentInClub ? (
-            <button>Quitter le club</button>
+            <button className="club-action-btn leave-btn">Quitter le club</button>
           ) : (
-            <button>Rejoindre le club</button>
+            <button className="club-action-btn join-btn">Rejoindre le club</button>
           )}
         </div>
       ) : (
-        <p>Rechargement...</p>
+        <p className="loading-text">Rechargement...</p>
       )}
-
     </div>
   );
 }

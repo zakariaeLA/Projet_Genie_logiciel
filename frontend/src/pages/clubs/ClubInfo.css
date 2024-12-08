@@ -1,0 +1,72 @@
+.club-info-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.club-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  text-align: center;
+}
+
+.club-title {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.club-image-container {
+  margin-bottom: 20px;
+}
+
+.club-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.club-description {
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  color: #555;
+  text-align: justify;
+}
+
+.club-action-btn {
+  font-size: 1em;
+  padding: 10px 20px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.join-btn {
+  background: #4caf50;
+  color: #fff;
+}
+
+.join-btn:hover {
+  background: #45a049;
+}
+
+.leave-btn {
+  background: #f44336;
+  color: #fff;
+}
+
+.leave-btn:hover {
+  background: #e53935;
+}
+
+.loading-text {
+  text-align: center;
+  font-size: 1.2em;
+  color: #666;
+}
