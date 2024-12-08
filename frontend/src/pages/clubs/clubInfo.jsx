@@ -4,7 +4,7 @@ const descriptionMap = {
     "Mines IT": "This is a technology-oriented club focusing on IT, coding, and innovations.",
     "Astronomines": "A club dedicated to exploring astronomy and related sciences.",
     "Alumni": "A networking hub connecting current students with alumni.",
-    "Japamines": "A volunteer-focused group working on charitable and community projects."
+    "Bénévolat": "A volunteer-focused group working on charitable and community projects."
     // Add more mappings as needed
   };
 
