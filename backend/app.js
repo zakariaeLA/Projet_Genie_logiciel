@@ -24,3 +24,6 @@ app.use('/api/events', eventsRouter);
 app.listen(PORT, () => {
     console.log(`Serveur en cours d'exécution sur http://localhost:${PORT}`);
 });
+const adminRouter = require('./routes/admin'); // Assurez-vous que le chemin est correct
+
+app.use('/api/admin', adminRouter); // Préfixer les routes d'administration
