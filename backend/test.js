@@ -16,17 +16,19 @@ db.once("open", async () => {
   console.log("Connecté à MongoDB pour le test.");
 
   // Création d’un étudiant
-  const nouvelclub = new Club({
-    nom: "clubtest",
-    filtre: ["art","sport","culture"],
-    description: "abcdefgh ijklmnop qrstuv",
-    image: "nononono",
-    membres:[],
-    responsables: [],
+  const nvetudiant = new Etudiant({
+    nom: "kandoussi",
+    prenom: "aya",
+    email: "aya.kandoussi@enim.ac.ma",
+    motDePasse: "sesame",
+    profilePic:"",
+    clubs: [],
+    evenementsParticipes: [],
+    evenementsAVenir: [],
   });
 
   try {
-    const result = await nouvelclub.save(); // Sauvegarde dans la base de données
+    const result = await nvetudiant.save(); // Sauvegarde dans la base de données
     console.log("Club créé avec succès :", result);
   } catch (error) {
     console.error("Erreur lors de la création du club :", error.message);
