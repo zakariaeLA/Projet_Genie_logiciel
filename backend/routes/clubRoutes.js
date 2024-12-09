@@ -81,9 +81,10 @@ router.get('/:id/clubs/recherche', async (req, res) => {
 
     // Retourner les clubs trouvés
     const resultats = clubs.map((club) => ({
-      image: club.image ? `/imagesClubs/${club.image}` : null,
-      nom: club.nom,
+      
       filtre: club.filtre,
+      nom: club.nom,
+      
     }));
 
     res.json(resultats);
