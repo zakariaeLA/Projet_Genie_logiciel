@@ -18,13 +18,16 @@ app.use(bodyParser.json()); // Pour parser les requêtes JSON
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Connexion à MongoDB
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost/gestion_parascolaire', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-.then(() => console.log('Connexion à MongoDB réussie'))
-.catch(err => console.error('Erreur de connexion à MongoDB:', err));
+// Connexion à MongoDB Atlas
+const uri = process.env.MONGO_URI;
+mongoose
+  .connect(uri)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.log("Error connecting to MongoDB:", err));
+
+  app.get("/", (req, res) => {
+    res.send("Backend is working and connected to MongoDB!");
+  });
 
 // Routes publiques (non protégées par JWT)
 app.use("/api", connexionRoute);
@@ -48,3 +51,4 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Quelque chose a mal tourné !');
 });
+app.use('/api/events', eventsRouter); // Ajoutez cette ligne pour intégrer les routes des événements
