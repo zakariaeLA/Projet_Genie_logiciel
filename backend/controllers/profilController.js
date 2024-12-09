@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const upload = require("../middlewares/upload"); // Importer Multer
 
-
 // Afficher le profil
 exports.afficherProfil = async (req, res) => {
   try {
@@ -47,7 +46,6 @@ exports.mettreAJourMotDePasse = async (req, res) => {
   }
 };
 
-
 // Mettre à jour ou initialiser la photo de profil
 exports.modifierPhotoDeProfil = async (req, res) => {
   try {
@@ -70,6 +68,8 @@ exports.modifierPhotoDeProfil = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Erreur serveur lors de la mise à jour de la photo de profil." });
+    res.status(500).json({
+      message: "Erreur serveur lors de la mise à jour de la photo de profil.",
+    });
   }
 };

@@ -7,6 +7,7 @@ const profilRoutes = require("./routes/profil");
 const path = require("path");
 const authMiddleware = require('./middlewares/auth');
 
+
 require("dotenv").config({ path: "./config/.env" });
 
 const port = process.env.PORT || 5000;

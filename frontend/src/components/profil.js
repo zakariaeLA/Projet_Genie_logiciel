@@ -148,29 +148,27 @@ const Profil = () => {
 
       {/* Formulaire de modification du mot de passe */}
       <div className="mdp">
-      {isPasswordChangeVisible && (
-        <form onSubmit={handleUpdatePassword}>
-          <div>
-
-            <input
-              type="password"
-              placeholder="Mot de passe actuel"
-              value={motDePasseActuel}
-              onChange={(e) => setMotDePasseActuel(e.target.value)}
-            />
-          </div>
-          <div>
-
-            <input
-              type="password"
-              placeholder="Nouveau mot de passe"
-              value={nouveauMotDePasse}
-              onChange={(e) => setNouveauMotDePasse(e.target.value)}
-            />
-          </div>
-          <button type="submit">Mettre à jour le mot de passe</button>
-        </form>
-      )}
+        {isPasswordChangeVisible && (
+          <form onSubmit={handleUpdatePassword}>
+            <div>
+              <input
+                type="password"
+                placeholder="Mot de passe actuel"
+                value={motDePasseActuel}
+                onChange={(e) => setMotDePasseActuel(e.target.value)}
+              />
+            </div>
+            <div>
+              <input
+                type="password"
+                placeholder="Nouveau mot de passe"
+                value={nouveauMotDePasse}
+                onChange={(e) => setNouveauMotDePasse(e.target.value)}
+              />
+            </div>
+            <button type="submit">Mettre à jour le mot de passe</button>
+          </form>
+        )}
       </div>
     </div>
   );
