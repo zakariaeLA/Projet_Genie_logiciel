@@ -83,7 +83,6 @@ const Profil = () => {
   };
 
   return (
-
     <div className="profil-container">
       <h1>Mon Profil</h1>
 
