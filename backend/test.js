@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-const Etudiant = require("./models/Etudiant.js"); // Modèle Étudiant
-const Evenement = require("./models/Evenement.js"); // Modèle Evenement
-const Club = require("./models/Club.js"); // Modèle Club
+const Etudiant = require("./models/Etudiant.js"); // Chemin vers ton modèle Étudiant
+const Club = require("./models/Club.js"); // Chemin vers ton modèle Étudiant
 
 // Connexion à MongoDB
 mongoose.connect(
@@ -15,26 +14,26 @@ mongoose.connect(
 const db = mongoose.connection;
 db.once("open", async () => {
   console.log("Connecté à MongoDB pour le test.");
-  const Club = require('../models/Club'); // Assurez-vous que le modèle Club est bien importé
 
-  async function updateClubFilters() {
-    try {
-      // Modifier le filtre du club "Mines IT"
-      await Club.updateOne(
-        { nom: "Mines IT" }, // Filtrer par le nom du club
-        { $set: { filtre: ["science"] } } // Mettre à jour le champ filtre avec "science"
-      );
-  
-      // Modifier le filtre du club "Japamines"
-      await Club.updateOne(
-        { nom: "Japamines" }, // Filtrer par le nom du club
-        { $set: { filtre: ["science"] } } // Mettre à jour le champ filtre avec "science"
-      );
-  
-      console.log("Les filtres des clubs ont été mis à jour.");
-    } catch (error) {
-      console.error("Erreur lors de la mise à jour des filtres des clubs:", error);
-    }
+  // Création d’un étudiant
+  const nouvelEtudiant = new Etudiant({
+    nom: "Kandoussi",
+    prenom: "Aya",
+    email: "aya.kandoussi@enim.ac.ma",
+    motDePasse: "sesame",
+    profilePic:"blabla",
+    clubs: [],
+    evenementsParticipes: [],
+    evenementsAVenir: [],
+  });
+
+  try {
+    const result = await nouvelEtudiant.save(); // Sauvegarde dans la base de données
+    console.log("Étudiant créé avec succès :", result);
+  } catch (error) {
+    console.error("Erreur lors de la création de l'étudiant :", error.message);
+  } finally {
+    db.close(); // Ferme la connexion
   }
   
   // Appeler la fonction pour effectuer la mise à jour
