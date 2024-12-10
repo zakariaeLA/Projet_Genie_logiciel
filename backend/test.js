@@ -17,10 +17,10 @@ db.once("open", async () => {
 
   // Création d’un étudiant
   const nvetudiant = new Etudiant({
-    nom: "kandoussi",
-    prenom: "aya",
-    email: "aya.kandoussi@enim.ac.ma",
-    motDePasse: "sesame",
+    nom: "user",
+    prenom: "user",
+    email: "user@enim.ac.ma",
+    motDePasse: "user",
     profilePic:"",
     clubs: [],
     evenementsParticipes: [],
