@@ -1,13 +1,16 @@
 const express = require('express');
 const Etudiant = require('../models/Etudiant'); // Modèle Etudiant
 const Evenement = require('../models/Evenement');
+const authMiddleware = require('../middlewares/auth'); // Importer le middleware
+
 const path = require('path');
 const router = express.Router();
 
 // Récupérer uniquement les événements participés et à venir d’un étudiant
-router.get('/:id/evenements', async (req, res) => {
+router.get('/evenements', authMiddleware, async (req, res) => {
   try {
-    const etudiant = await Etudiant.findById(req.params.id)
+    const etudiantId = req.user.id; // Récupérer l'ID de l'étudiant depuis le token
+    const etudiant = await Etudiant.findById(etudiantId)
       .select('evenementsParticipes evenementsAVenir') // Sélectionner uniquement les champs des événements
       .populate({
         path: 'evenementsParticipes',
