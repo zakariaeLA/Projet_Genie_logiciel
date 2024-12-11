@@ -26,17 +26,17 @@ mongoose
 // Routes
 app.use('/api/events', eventsRouter);
 // Serve static files (images) from the 'public/images' folder
-app.use('/imagesEvenement', express.static(path.join(__dirname, 'public', 'imagesEvenement')));
-// Route to serve an image based on its filename
-app.get('/api/imagesEvenement/:imageName', (req, res) => {
-    const imageName = req.params.imageName;
-    const imagePath = path.join(__dirname, 'public', 'imagesEvenement', imageName);
-    res.sendFile(imagePath, (err) => {
-        if (err) {
-            res.status(404).send('Image not found');
-        }
-    });
-});
+// app.use('/imagesEvenement', express.static(path.join(__dirname, 'public', 'imagesEvenement')));
+// // Route to serve an image based on its filename
+// app.get('/api/imagesEvenement/:imageName', (req, res) => {
+//     const imageName = req.params.imageName;
+//     const imagePath = path.join(__dirname, 'public', 'imagesEvenement', imageName);
+//     res.sendFile(imagePath, (err) => {
+//         if (err) {
+//             res.status(404).send('Image not found');
+//         }
+//     });
+// });
 
 // Démarrer le serveur
 app.listen(PORT, () => {

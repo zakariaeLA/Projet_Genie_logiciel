@@ -112,6 +112,28 @@ export default function EventParticipation() {
             [dateKey]: !prev[dateKey],
         }));
     };
+    const handleParticipation = async (eventId) => {
+        const etudiantId = "6759fe066503e0f9636001ad"; 
+    
+        try {
+          const response = await fetch(`http://localhost:3000/api/events/${eventId}/ajouter-participant`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ etudiantId })
+          });
+    
+          const result = await response.json();
+          if (response.ok) {
+            console.log('Participant ajouté avec succès:', result);
+          } else {
+            console.error('Erreur:', result.message);
+          }
+        } catch (error) {
+          console.error('Erreur lors de la requête:', error);
+        }
+      };
 
     return (
         <div className="participation-body">
@@ -182,7 +204,7 @@ export default function EventParticipation() {
                         </div>
                         <p className="description">{selectedEvent.description}</p>
                         <div className="button-wrapper">
-                            <button onClick={() => console.log('participé')}>Je participe</button>
+                            <button onClick={() => handleParticipation(selectedEvent._id)}>Je participe</button>
                         </div>
                     </section>
                 )}

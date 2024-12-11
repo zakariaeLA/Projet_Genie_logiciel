@@ -14,6 +14,35 @@ router.post('/', async (req, res) => {
         res.status(400).send({ message: 'Erreur lors de la création de l\'événement', error });
     }
 });
+// Route pour ajouter un étudiant à la liste des participants d'un événement
+router.post('/:id/ajouter-participant', async (req, res) => {
+    const eventId = req.params.id;
+    const { etudiantId } = req.body; 
+
+    if (!etudiantId) {
+        return res.status(400).send({ message: "L'ID de l'étudiant est requis" });
+    }
+
+    try {
+        const evenement = await Evenement.findById(eventId);
+        if (!evenement) {
+            return res.status(404).send({ message: 'Événement introuvable' });
+        }
+
+        // Vérifier si l'étudiant est déjà participant
+        if (evenement.participants.includes(etudiantId)) {
+            return res.status(400).send({ message: 'Cet étudiant est déjà participant à cet événement' });
+        }
+
+        // Ajouter l'étudiant aux participants
+        evenement.participants.push(etudiantId);
+        await evenement.save();
+
+        res.send({ message: 'Participant ajouté avec succès', evenement });
+    } catch (error) {
+        res.status(500).send({ message: 'Erreur lors de l\'ajout du participant', error });
+    }
+});
 
 // Route pour obtenir tous les événements
 router.get('/', async (req, res) => {
