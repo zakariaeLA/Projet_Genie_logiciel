@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./connexion.css";
+import "../styles/connexion.css";
 
 const Connexion = () => {
   const [email, setEmail] = useState("");
@@ -18,6 +18,7 @@ const Connexion = () => {
       });
 
       if (response.status === 200) {
+        localStorage.setItem("token", response.data.token);
         setMessage("Connexion réussie !");
         console.log("Token reçu :", response.data.token);
       }

@@ -2,7 +2,13 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 const connexionRoute = require("./routes/connexion");
+const profilRoutes = require("./routes/profil");
+const path = require("path");
+const authMiddleware = require('./middlewares/auth');
+
+
 const profilRoutes = require("./routes/profil");
 const path = require("path");
 const authMiddleware = require('./middlewares/auth');
@@ -20,7 +26,11 @@ app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes publiques (non protégées par JWT)
+// Routes publiques (non protégées par JWT)
 app.use("/api", connexionRoute);
+
+// Routes protégées (nécessitent une authentification)
+app.use("/api", authMiddleware, profilRoutes); // Applique le middleware auth avant profilRoutes
 
 // Routes protégées (nécessitent une authentification)
 app.use("/api", authMiddleware, profilRoutes); // Applique le middleware auth avant profilRoutes
