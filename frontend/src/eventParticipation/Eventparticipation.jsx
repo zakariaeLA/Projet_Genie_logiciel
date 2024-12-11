@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './ParticipationEvent.css';
 import axios from 'axios';
-import imagevent from './images/cosmoNightt.jpeg';
+// const ETUDIANT_ID = "6759fe066503e0f9636001ad";
+const ETUDIANT_ID = "6759fe1c6503e0f9636001ae";
+
 export default function EventParticipation() {
     const today = new Date();
     const [currentMonth, setCurrentMonth] = useState(today.getMonth());
@@ -9,6 +11,8 @@ export default function EventParticipation() {
     const [events, setEvents] = useState([]);
     const [participation, setParticipation] = useState({});
     const [selectedEvent, setSelectedEvent] = useState(null);
+    const [participatedInEvent, setParticipatedInEvent] = useState(false); 
+
     const fetchEvents = async () => {
         try {
             const response = await axios.get('http://localhost:3000/api/events');
@@ -17,15 +21,14 @@ export default function EventParticipation() {
             const processedEvents = response.data.map(event => ({
                 ...event,
                 date: new Date(event.date), 
-              }));
+            }));
           
-              setEvents(processedEvents);
+            setEvents(processedEvents);
         } catch (error) {
             console.error('Error fetching events:', error);
         }
     }
 
-    
     useEffect(() => {
         fetchEvents();
     }, []);
@@ -40,6 +43,7 @@ export default function EventParticipation() {
             setCurrentMonth(currentMonth - 1);
         }
         setSelectedEvent(null);
+        setParticipatedInEvent(false);
     };
 
     const nextMonth = () => {
@@ -50,6 +54,7 @@ export default function EventParticipation() {
             setCurrentMonth(currentMonth + 1);
         }
         setSelectedEvent(null);
+        setParticipatedInEvent(false);
     };
 
     const getDaysInMonth = (month, year) => {
@@ -65,7 +70,6 @@ export default function EventParticipation() {
 
     const daysInMonth = getDaysInMonth(currentMonth, currentYear);
 
-    
     const dates = [];
 
     
@@ -80,11 +84,10 @@ export default function EventParticipation() {
     for (let i = 1; i <= daysInMonth; i++) {
         const dateObj = new Date(currentYear, currentMonth, i);
         const event = events.find(
-            (e) =>{
-                return e.date.getDate() === i &&
+            (e) =>
+                e.date.getDate() === i &&
                 e.date.getMonth() === currentMonth &&
                 e.date.getFullYear() === currentYear
-            }
         );
         dates.push({
             day: i,
@@ -103,6 +106,7 @@ export default function EventParticipation() {
 
     const handleEventClick = (event) => {
         setSelectedEvent(event);
+        setParticipatedInEvent(event.participants.includes(ETUDIANT_ID));
     };
 
     const handleParticipationClick = (date) => {
@@ -112,28 +116,29 @@ export default function EventParticipation() {
             [dateKey]: !prev[dateKey],
         }));
     };
+
     const handleParticipation = async (eventId) => {
         const etudiantId = "6759fe066503e0f9636001ad"; 
-    
         try {
           const response = await fetch(`http://localhost:3000/api/events/${eventId}/ajouter-participant`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ etudiantId })
+            body: JSON.stringify({ etudiantId:ETUDIANT_ID })
           });
     
           const result = await response.json();
           if (response.ok) {
             console.log('Participant ajouté avec succès:', result);
+            setParticipatedInEvent(true);
           } else {
             console.error('Erreur:', result.message);
           }
         } catch (error) {
           console.error('Erreur lors de la requête:', error);
         }
-      };
+    };
 
     return (
         <div className="participation-body">
@@ -145,8 +150,8 @@ export default function EventParticipation() {
                     <div className="calendar-header">
                         <button onClick={prevMonth}>&lt;</button>
                         <span>
-              {new Date(currentYear, currentMonth).toLocaleString('fr', { month: 'long' })}
-            </span>
+                            {new Date(currentYear, currentMonth).toLocaleString('fr', { month: 'long' })}
+                        </span>
                         <button onClick={nextMonth}>&gt;</button>
                     </div>
                     <div className="days">
@@ -171,7 +176,9 @@ export default function EventParticipation() {
                                     className={`${event ? 'event-day' : ''} ${isCurrentMonth ? '' : 'other-month'}`}
                                     onClick={() => {
                                         if (event) {
+                                            
                                             handleEventClick(event);
+                                            handleParticipationClick(date);
                                         }
                                     }}
                                 >
@@ -179,10 +186,6 @@ export default function EventParticipation() {
                                     {event && (
                                         <span
                                             className={`star ${isParticipated ? 'gray' : 'yellow'}`}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleParticipationClick(date);
-                                            }}
                                         ></span>
                                     )}
                                 </div>
@@ -194,7 +197,6 @@ export default function EventParticipation() {
                 {selectedEvent && (
                     <section id="details-evenement">
                         <div className="upper-section">
-                            
                             <img src={selectedEvent.image} alt="image de l'événement" />
                             <div className="event-info">
                                 <h2>{selectedEvent.titre}</h2>
@@ -204,7 +206,9 @@ export default function EventParticipation() {
                         </div>
                         <p className="description">{selectedEvent.description}</p>
                         <div className="button-wrapper">
-                            <button onClick={() => handleParticipation(selectedEvent._id)}>Je participe</button>
+                            <button disabled={participatedInEvent} onClick={() => handleParticipation(selectedEvent._id)}>
+                                {participatedInEvent ? 'Participé' : 'Je participe'}
+                            </button>
                         </div>
                     </section>
                 )}
