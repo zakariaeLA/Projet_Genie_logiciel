@@ -173,8 +173,7 @@ export default function EventParticipation() {
                     <section id="details-evenement">
                         <div className="upper-section">
                             
-                            {/* <img src={imagevent.image} alt="image de l'événement" /> */}
-                            <img src={imagevent} alt="image de l'événement" />
+                            <img src={selectedEvent.image} alt="image de l'événement" />
                             <div className="event-info">
                                 <h2>{selectedEvent.titre}</h2>
                                 <p>{selectedEvent.date.toLocaleDateString("fr")}</p>
