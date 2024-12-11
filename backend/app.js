@@ -1,53 +1,42 @@
-const express = require('express');
+const express = require("express");
 const bodyParser = require("body-parser");
-const connexionRoute = require("./routes/connexion");
-const etudiantRoutes = require('./routes/etudiantsRoutes'); // Import des routes étudiants
-
+const cors = require("cors");
 const mongoose = require("mongoose");
-require("dotenv").config({ path: "./config/.env" }); // Assurez-vous que votre fichier .env existe et contient la clé MONGO_URI
-const path = require('path');
-const cors = require('cors'); // Importer le package CORS
+const connexionRoute = require("./routes/connexion");
+const profilRoutes = require("./routes/profil");
+const path = require("path");
+const authMiddleware = require('./middlewares/auth');
+
+
+require("dotenv").config({ path: "./config/.env" });
+
+const port = process.env.PORT || 5000;
 const app = express();
-const port = 8000;
 
-// Middleware CORS : C'est correct, mais vous pouvez restreindre les origines si nécessaire
-app.use(cors()); // Cela permet à toutes les origines d'accéder à votre API, vous pouvez configurer cela pour plus de sécurité si nécessaire
-
-// Serveur de fichiers statiques pour les images des événements
-app.use('/imagesEvenement', express.static(path.join(__dirname, 'public', 'imagesEvenement')));
-
-// Route pour servir une image en fonction de son nom
-app.get('/api/imagesEvenement/:imageName', (req, res) => {
-    const imageName = req.params.imageName;
-    const imagePath = path.join(__dirname, 'public', 'imagesEvenement', imageName);
-    res.sendFile(imagePath, (err) => {
-        if (err) {
-            res.status(404).send('Image not found');
-        }
-    });
-});
-
-// Middleware : Body parser et JSON parsing
+// Middleware
+app.use(cors());
 app.use(bodyParser.json());
-app.use(express.json()); // Il n'est pas nécessaire d'utiliser bodyParser et express.json() ensemble. `express.json()` suffit pour les nouvelles versions d'Express.
+app.use(express.json());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Utilisation des routes : Connexion et Étudiants
+// Routes publiques (non protégées par JWT)
 app.use("/api", connexionRoute);
-app.use('/api/etudiants', etudiantRoutes);
 
-// Connexion à MongoDB avec la variable d'environnement MONGO_URI
-const uri = process.env.MONGO_URI; // Assurez-vous que MONGO_URI est défini dans le fichier .env
+// Routes protégées (nécessitent une authentification)
+app.use("/api", authMiddleware, profilRoutes); // Applique le middleware auth avant profilRoutes
+
+// Connexion à MongoDB Atlas
+const uri = process.env.MONGO_URI;
 mongoose
   .connect(uri)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log("Error connecting to MongoDB:", err));
 
-// Route par défaut pour vérifier si le backend fonctionne
-app.get("/", (req, res) => {
-    res.send("Backend is working and connected to MongoDB!");
+// Démarrer le serveur
+app.listen(port, () => {
+  console.log("Server is running on port: http://localhost:5000");
 });
 
-// Démarrage du serveur
-app.listen(port, () => {
-    console.log(`Server is running on port: http://localhost:${port}`);
+app.get("/", (req, res) => {
+  res.send("Backend is working and connected to MongoDB!");
 });

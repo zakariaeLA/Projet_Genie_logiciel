@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const request = require("supertest");
-const app = require("./app"); // Assurez-vous que app.js exporte votre application Express
+const app = require("./app1"); // Assurez-vous que app.js exporte votre application Express
 
 // Connexion à MongoDB dans beforeAll
 beforeAll(async () => {
