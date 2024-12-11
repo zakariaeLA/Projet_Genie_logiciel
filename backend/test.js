@@ -1,53 +1,48 @@
 const mongoose = require("mongoose");
-const Etudiant = require("./models/Etudiant.js"); // Modèle Étudiant
-const Evenement = require("./models/Evenement.js"); // Modèle Evenement
-const Club = require("./models/Club.js"); // Modèle Club
+const request = require("supertest");
+const app = require("./app"); // Assurez-vous que app.js exporte votre application Express
 
-// Connexion à MongoDB
-mongoose.connect(
-  "mongodb+srv://ayakandoussi:sesame@parascolaire.bzzso.mongodb.net/GestionPara?retryWrites=true&w=majority&appName=parascolaire",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
-
-const db = mongoose.connection;
-db.once("open", async () => {
+// Connexion à MongoDB dans beforeAll
+beforeAll(async () => {
+  await mongoose.connect(
+    "mongodb+srv://ayakandoussi:sesame@parascolaire.bzzso.mongodb.net/GestionPara?retryWrites=true&w=majority&appName=parascolaire",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    }
+  );
   console.log("Connecté à MongoDB pour le test.");
+});
 
-  try {
-    // Récupérer les clubs existants
-    const club1 = await Club.findOne({ nom: "Bénévolat" });
-    
-    
+afterAll(async () => {
+  // Fermer la connexion à MongoDB après les tests
+  await mongoose.connection.close();
+  console.log("Connexion MongoDB fermée.");
+});
 
-    // Récupérer les étudiants existants
-    const etudiant1 = await Etudiant.findOne({ email: "zakariae.lachhab@enim.ac.ma" });
-   
-    
-    // Création d’un étudiant
-  const nouvelEtudiant = new Etudiant({
-    nom: "bouc",
-    prenom: "aya",
-    email: "aya.bouc@enim.ac.ma",
-    motDePasse: "sesameee",
-    profilePic:"bblaooa",
-    clubs: null,
-    evenementsParticipes: [],
-    evenementsAVenir: [],
+describe('POST /connexion', () => {
+  it('devrait retourner un token si les informations de connexion sont correctes', async () => {
+    const response = await request(app)
+      .post('/api/connexion')
+      .send({
+        email: 'aya.bouc@enim.ac.ma',
+        motDePasse: 'aya'
+      });
+
+    expect(response.status).toBe(200); // Vérifiez que la réponse a un statut 200
+    expect(response.body.token).toBeDefined(); // Vérifiez que le token est retourné
+    console.log('Token:', response.body.token);
   });
 
-  
-  const result = await nouvelEtudiant.save(); // Sauvegarde dans la base de données
-  console.log("Étudiant créé avec succès :", result);
-  
-    
+  it('devrait retourner une erreur si les informations de connexion sont incorrectes', async () => {
+    const response = await request(app)
+      .post('/api/connexion')
+      .send({
+        email: 'incorrect.email@domain.com',
+        motDePasse: 'wrongPassword'
+      });
 
-   
-  } catch (error) {
-    console.error("Erreur lors de l'exécution :", error.message);
-  } finally {
-    db.close(); // Fermer la connexion
-  }
+    expect(response.status).toBe(404); // Vérifiez le statut d'erreur approprié
+    expect(response.body.message).toBe('Email ou mot de passe incorrect.'); // Vérifiez le message d'erreur
+  });
 });

@@ -4,20 +4,19 @@ const connexionRoute = require("./routes/connexion");
 const etudiantRoutes = require('./routes/etudiantsRoutes'); // Import des routes étudiants
 
 const mongoose = require("mongoose");
-require("dotenv").config({ path: "./config/.env" });
+require("dotenv").config({ path: "./config/.env" }); // Assurez-vous que votre fichier .env existe et contient la clé MONGO_URI
 const path = require('path');
-const cors = require('cors'); // Import the cors package
+const cors = require('cors'); // Importer le package CORS
 const app = express();
 const port = 8000;
 
+// Middleware CORS : C'est correct, mais vous pouvez restreindre les origines si nécessaire
+app.use(cors()); // Cela permet à toutes les origines d'accéder à votre API, vous pouvez configurer cela pour plus de sécurité si nécessaire
 
-
-
-app.use(cors()); // This allows all origins by default
-
-// Serve static files (images) from the 'public/images' folder
+// Serveur de fichiers statiques pour les images des événements
 app.use('/imagesEvenement', express.static(path.join(__dirname, 'public', 'imagesEvenement')));
-// Route to serve an image based on its filename
+
+// Route pour servir une image en fonction de son nom
 app.get('/api/imagesEvenement/:imageName', (req, res) => {
     const imageName = req.params.imageName;
     const imagePath = path.join(__dirname, 'public', 'imagesEvenement', imageName);
@@ -28,28 +27,27 @@ app.get('/api/imagesEvenement/:imageName', (req, res) => {
     });
 });
 
-
-// Middleware
-app.use(cors());
+// Middleware : Body parser et JSON parsing
 app.use(bodyParser.json());
-app.use(express.json());
+app.use(express.json()); // Il n'est pas nécessaire d'utiliser bodyParser et express.json() ensemble. `express.json()` suffit pour les nouvelles versions d'Express.
 
-// Utilisation de la route de connexion
+// Utilisation des routes : Connexion et Étudiants
 app.use("/api", connexionRoute);
 app.use('/api/etudiants', etudiantRoutes);
 
-// Connexion à MongoDB Atlas
-const uri = process.env.MONGO_URI;
+// Connexion à MongoDB avec la variable d'environnement MONGO_URI
+const uri = process.env.MONGO_URI; // Assurez-vous que MONGO_URI est défini dans le fichier .env
 mongoose
   .connect(uri)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.log("Error connecting to MongoDB:", err));
 
-  app.get("/", (req, res) => {
+// Route par défaut pour vérifier si le backend fonctionne
+app.get("/", (req, res) => {
     res.send("Backend is working and connected to MongoDB!");
-  });
+});
 
-// Start the server
+// Démarrage du serveur
 app.listen(port, () => {
-    console.log("Server is running on port: http://localhost:8000");
-}); 
+    console.log(`Server is running on port: http://localhost:${port}`);
+});

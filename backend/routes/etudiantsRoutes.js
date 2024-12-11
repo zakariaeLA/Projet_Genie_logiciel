@@ -1,12 +1,10 @@
 const express = require('express');
-const Etudiant = require('../models/Etudiant'); // Modèle Etudiant
-const Evenement = require('../models/Evenement');
-const authMiddleware = require('../middlewares/auth'); // Importer le middleware
-
-const path = require('path');
 const router = express.Router();
+const authMiddleware = require('../middlewares/auth'); // Importer le middleware d'authentification
+const Etudiant = require('../models/Etudiant');
+const Evenement = require('../models/Evenement');
 
-// Récupérer uniquement les événements participés et à venir d’un étudiant
+// Route pour récupérer les événements participés et à venir d'un étudiant
 router.get('/evenements', authMiddleware, async (req, res) => {
   try {
     const etudiantId = req.user.id; // Récupérer l'ID de l'étudiant depuis le token
