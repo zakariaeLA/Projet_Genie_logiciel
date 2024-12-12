@@ -1,12 +1,21 @@
 const express = require('express');
 const Evenement = require('../models/Evenement'); // Assurez-vous que le chemin est correct
 const router = express.Router();
+const authMiddleware = require('../middlewares/auth'); // Importer le middleware d'authentification
+const Etudiant = require('../models/Etudiant');
 
 // Route pour s'inscrire à un événement
-router.post('/:id/participer', async (req, res) => {
-    const { etudiantId } = req.body; // Assurez-vous que l'ID de l'étudiant est envoyé dans le corps de la requête
-
+router.post('/:id/participer', authMiddleware, async (req, res) => {
     try {
+        const etudiantId = req.user.id; // Récupérer l'ID de l'étudiant depuis le token
+
+        // Vérifiez si l'étudiant existe
+        const etudiant = await Etudiant.findById(etudiantId);
+        if (!etudiant) {
+            return res.status(404).send({ message: 'Étudiant non trouvé' });
+        }
+
+        // Récupérer l'événement par ID
         const evenement = await Evenement.findById(req.params.id);
         if (!evenement) {
             return res.status(404).send({ message: 'Événement non trouvé' });
