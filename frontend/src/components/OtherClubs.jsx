@@ -6,10 +6,11 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import { axiosInstance } from "../lib/axios"; // Import your axios instance
 
 const OtherClubs = () => {
-  // ... (your state variables: searchQuery, selectedCategory, anchorEl)
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Tous");
+  const [anchorEl, setAnchorEl] = useState(null);
   const [clubs, setClubs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -17,29 +18,35 @@ const OtherClubs = () => {
   useEffect(() => {
     const fetchClubs = async () => {
       setIsLoading(true);
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem('token');
       if (!token) {
-        setError("Utilisateur non authentifié.");
+        setError('Utilisateur non authentifié.');
         return;
       }
 
       try {
-        const response = await axiosInstance.get(`/clubs/mesclubs`, {
+        const response = await fetch('http://localhost:7000/api/clubs/otherClubs', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setClubs(response.data); // Assuming your API returns the clubs directly
+
+        if (!response.ok) {
+          throw new Error('Erreur lors de la récupération des clubs.');
+        }
+
+        const data = await response.json();
+        setClubs(data); 
       } catch (error) {
         console.error("Error fetching clubs:", error);
-        setError("Erreur lors de la récupération des clubs.");
+        setError(error.message); 
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchClubs();
-  }, []); // Run effect only on component mount
+  }, []); 
 
   // Filter clubs based on the search query and category
   const filteredClubs = clubs.filter(
@@ -66,29 +73,19 @@ const OtherClubs = () => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
+    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
       {/* ... (search and filter) */}
 
       {error && <Typography color="error">{error}</Typography>}
 
       {/* Display clubs */}
       {isLoading ? (
-        <Typography>Loading clubs...</Typography>
-      ) : clubs.length > 0 ? (
-        clubs.map((club, index) => (
-          <Box
-            key={index}
-            className="club-item"
-            sx={{ marginBottom: "20px" }}
-          >
+        <Typography>Loading clubs...</Typography> 
+      ) : filteredClubs.length > 0 ? (
+        filteredClubs.map((club) => (
+          <Box key={club.id} className="club-item" sx={{ marginBottom: "20px" }}> 
             <img
-              src={`/imagesClubs/${club.image}`}
+              src={`/imagesClubs/${club.image}`} 
               alt={`${club.nom} Logo`}
               style={styles.image}
             />
@@ -96,11 +93,12 @@ const OtherClubs = () => {
           </Box>
         ))
       ) : (
-        <Typography>Aucun club trouvé.</Typography>
+        <Typography>Aucun club correspondant trouvé</Typography>
       )}
     </Box>
   );
 };
+
 
 const styles = {
   image: {
