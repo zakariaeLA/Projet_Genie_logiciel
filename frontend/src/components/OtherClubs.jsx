@@ -1,26 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Import useEffect
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import { axiosInstance } from '../lib/axios'; // Import your axios instance
 
 const OtherClubs = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Tous");
   const [anchorEl, setAnchorEl] = useState(null);
+  const [clubs, setClubs] = useState([]); // State to store fetched clubs
+  const [isLoading, setIsLoading] = useState(true); // State to handle loading
+  const etudiantId = '67508266533eb41d8194ded0'; // Replace with actual student ID
 
-  const open = Boolean(anchorEl);
+  useEffect(() => {
+    const fetchClubs = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axiosInstance.get(`/clubs/${etudiantId}/clubs`);
+        setClubs(response.data.autresClubs); // Assuming your API returns 'autresClubs'
+      } catch (error) {
+        console.error("Error fetching clubs:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const clubs = [
-    { name: "Japamines", logo: "japamines_logo.jpg", categories: ["science"] },
-    { name: "Sport", logo: "sport_logo.jpg", categories: ["Sport"] },
-    { name: "Art Generation", logo: "art_generation_logo.jpg", categories: ["Art"] },
-    { name: "FORUM", logo: "Forum_logo.jpg", categories: ["entreprise"] },
-  ];
+    fetchClubs();
+  }, [etudiantId]); 
 
   // Filter clubs based on the search query and category
   const filteredClubs = clubs.filter(
@@ -48,44 +58,20 @@ const OtherClubs = () => {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      {/* Search and Filter Row */}
-      <Box sx={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
-        {/* Search input */}
-        <TextField
-          label="Rechercher un club"
-          variant="outlined"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          sx={{ marginRight: "20px", width: "300px" }}
-        />
+      {/* ... (search and filter) */}
 
-        {/* Filter button with icon */}
-        <IconButton onClick={handleMenuClick}>
-          <FilterListIcon />
-        </IconButton>
-        <Menu anchorEl={anchorEl} open={open} onClose={handleMenuClose}>
-          {["Tous", "science", "Sport", "Art", "entreprise"].map((category) => (
-            <MenuItem
-              key={category}
-              selected={selectedCategory === category}
-              onClick={() => handleCategoryChange(category)}
-            >
-              {category}
-            </MenuItem>
-          ))}
-        </Menu>
-      </Box>
-
-      {/* Display filtered clubs */}
-      {filteredClubs.length > 0 ? (
+      {/* Display clubs */}
+      {isLoading ? (
+        <Typography>Loading clubs...</Typography> // Display loading state
+      ) : filteredClubs.length > 0 ? (
         filteredClubs.map((club, index) => (
           <Box key={index} className="club-item" sx={{ marginBottom: "20px" }}>
             <img
-              src={club.logo}
-              alt={`${club.name} Logo`}
+              src={`/imagesClubs/${club.image}`} // Assuming your backend serves images
+              alt={`${club.nom} Logo`}
               style={styles.image}
             />
-            <Typography>{club.name}</Typography>
+            <Typography>{club.nom}</Typography>
           </Box>
         ))
       ) : (
