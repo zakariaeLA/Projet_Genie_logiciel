@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; // Import useEffect
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
@@ -6,31 +6,40 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import { axiosInstance } from '../lib/axios'; // Import your axios instance
+import { axiosInstance } from "../lib/axios"; // Import your axios instance
 
 const OtherClubs = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Tous");
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [clubs, setClubs] = useState([]); // State to store fetched clubs
-  const [isLoading, setIsLoading] = useState(true); // State to handle loading
-  const etudiantId = '67508266533eb41d8194ded0'; // Replace with actual student ID
+  // ... (your state variables: searchQuery, selectedCategory, anchorEl)
+  const [clubs, setClubs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchClubs = async () => {
       setIsLoading(true);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("Utilisateur non authentifié.");
+        return;
+      }
+
       try {
-        const response = await axiosInstance.get(`/clubs/${etudiantId}/clubs`);
-        setClubs(response.data.autresClubs); // Assuming your API returns 'autresClubs'
+        const response = await axiosInstance.get(`/clubs/mesclubs`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setClubs(response.data); // Assuming your API returns the clubs directly
       } catch (error) {
         console.error("Error fetching clubs:", error);
+        setError("Erreur lors de la récupération des clubs.");
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchClubs();
-  }, [etudiantId]); 
+  }, []); // Run effect only on component mount
 
   // Filter clubs based on the search query and category
   const filteredClubs = clubs.filter(
@@ -57,17 +66,29 @@ const OtherClubs = () => {
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
       {/* ... (search and filter) */}
+
+      {error && <Typography color="error">{error}</Typography>}
 
       {/* Display clubs */}
       {isLoading ? (
-        <Typography>Loading clubs...</Typography> // Display loading state
-      ) : filteredClubs.length > 0 ? (
-        filteredClubs.map((club, index) => (
-          <Box key={index} className="club-item" sx={{ marginBottom: "20px" }}>
+        <Typography>Loading clubs...</Typography>
+      ) : clubs.length > 0 ? (
+        clubs.map((club, index) => (
+          <Box
+            key={index}
+            className="club-item"
+            sx={{ marginBottom: "20px" }}
+          >
             <img
-              src={`/imagesClubs/${club.image}`} // Assuming your backend serves images
+              src={`/imagesClubs/${club.image}`}
               alt={`${club.nom} Logo`}
               style={styles.image}
             />
@@ -75,7 +96,7 @@ const OtherClubs = () => {
           </Box>
         ))
       ) : (
-        <Typography>Aucun club correspondant trouvé</Typography>
+        <Typography>Aucun club trouvé.</Typography>
       )}
     </Box>
   );
