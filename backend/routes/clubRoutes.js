@@ -1,12 +1,15 @@
 const express = require('express');
 const Etudiant = require('../models/Etudiant'); // Modèle Etudiant
+const authMiddleware = require('../middlewares/auth'); // Importer le middleware d'authentification
+
 const Club = require('../models/Club');
 const router = express.Router();
 
 // Récupérer les clubs participés et les autres clubs
-router.get('/:id/clubs', async (req, res) => {
+router.get('/clubs', authMiddleware, async (req, res) => {
   try {
-    const etudiant = await Etudiant.findById(req.params.id)
+    const etudiantId = req.user.id; // Récupérer l'ID de l'étudiant depuis le token
+    const etudiant = await Etudiant.findById(etudiantId)
       .select('clubs') // Sélectionner uniquement les clubs de l'étudiant
       .populate({
         path: 'clubs',
