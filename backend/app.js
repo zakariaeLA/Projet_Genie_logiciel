@@ -5,6 +5,9 @@ const eventsRouter = require('./routes/creation et obtention');
 require("dotenv").config({ path: "./config/.env" });
 const app = express();
 const PORT = process.env.PORT || 3000;
+const http = require('http');
+const socketIo = require('socket.io');
+
 
 // Middleware
 app.use(bodyParser.json()); // Pour parser les requêtes JSON
@@ -22,5 +25,26 @@ app.use('/api/events', eventsRouter);
 
 // Démarrer le serveur
 app.listen(PORT, () => {
+    console.log(`Serveur en cours d'exécution sur http://localhost:${PORT}`);
+});
+// Créez le serveur HTTP
+const server = http.createServer(app);
+const io = socketIo(server);
+
+// Écoutez les connexions des clients
+io.on('connection', (socket) => {
+    console.log('Un utilisateur est connecté');
+
+    socket.on('message', (data) => {
+        io.emit('message', data); // Émettez le message à tous les clients connectés
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Un utilisateur est déconnecté');
+    });
+});
+
+// Remplacez app.listen par server.listen
+server.listen(PORT, () => {
     console.log(`Serveur en cours d'exécution sur http://localhost:${PORT}`);
 });
