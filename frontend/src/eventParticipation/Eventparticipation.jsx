@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import './ParticipationEvent.css';
 import axios from 'axios';
-// const ETUDIANT_ID = "6759fe066503e0f9636001ad";
-const ETUDIANT_ID = "6759fe1c6503e0f9636001ae";
 
 export default function EventParticipation() {
     const today = new Date();
@@ -11,25 +9,42 @@ export default function EventParticipation() {
     const [events, setEvents] = useState([]);
     const [participation, setParticipation] = useState({});
     const [selectedEvent, setSelectedEvent] = useState(null);
-    const [participatedInEvent, setParticipatedInEvent] = useState(false); 
-
+    const [currentEtudiantId, setCurrentEtudiantId] = useState("");
+    const [participatedInEvent, setParticipatedInEvent] = useState(false);
     const fetchEvents = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/events');
+            const token = localStorage.getItem('token');
+            const response = await axios.get('http://localhost:8000/api/events', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             console.log('Events:', response.data);
-            
+
             const processedEvents = response.data.map(event => ({
                 ...event,
-                date: new Date(event.date), 
+                date: new Date(event.date),
             }));
-          
             setEvents(processedEvents);
         } catch (error) {
             console.error('Error fetching events:', error);
         }
     }
-
+    const fetchProfil = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get('http://localhost:8000/api/profil', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setCurrentEtudiantId(response.data._id);
+        } catch (error) {
+            console.error('Error fetching events:', error);
+        }
+    }
     useEffect(() => {
+        fetchProfil();
         fetchEvents();
     }, []);
 
@@ -72,7 +87,7 @@ export default function EventParticipation() {
 
     const dates = [];
 
-    
+
     for (let i = firstDayOfMonth - 1; i >= 0; i--) {
         dates.push({
             day: daysInPrevMonth - i,
@@ -80,7 +95,7 @@ export default function EventParticipation() {
         });
     }
 
-    
+
     for (let i = 1; i <= daysInMonth; i++) {
         const dateObj = new Date(currentYear, currentMonth, i);
         const event = events.find(
@@ -96,7 +111,7 @@ export default function EventParticipation() {
         });
     }
 
-    
+
     while (dates.length % 7 !== 0) {
         dates.push({
             day: dates.length - daysInMonth - firstDayOfMonth + 1,
@@ -106,7 +121,7 @@ export default function EventParticipation() {
 
     const handleEventClick = (event) => {
         setSelectedEvent(event);
-        setParticipatedInEvent(event.participants.includes(ETUDIANT_ID));
+        setParticipatedInEvent(event.participants.includes(currentEtudiantId));
     };
 
     const handleParticipationClick = (date) => {
@@ -118,25 +133,26 @@ export default function EventParticipation() {
     };
 
     const handleParticipation = async (eventId) => {
-        const etudiantId = "6759fe066503e0f9636001ad"; 
         try {
-          const response = await fetch(`http://localhost:3000/api/events/${eventId}/ajouter-participant`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ etudiantId:ETUDIANT_ID })
-          });
-    
-          const result = await response.json();
-          if (response.ok) {
-            console.log('Participant ajouté avec succès:', result);
-            setParticipatedInEvent(true);
-          } else {
-            console.error('Erreur:', result.message);
-          }
+            const token = localStorage.getItem('token');
+
+            const response = await fetch(`http://localhost:8000/api/events/${eventId}/participer`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                console.log('Participant ajouté avec succès:', result);
+                setParticipatedInEvent(true);
+            } else {
+                console.error('Erreur:', result.message);
+            }
         } catch (error) {
-          console.error('Erreur lors de la requête:', error);
+            console.error('Erreur lors de la requête:', error);
         }
     };
 
@@ -150,7 +166,7 @@ export default function EventParticipation() {
                     <div className="calendar-header">
                         <button onClick={prevMonth}>&lt;</button>
                         <span>
-                            {new Date(currentYear, currentMonth).toLocaleString('fr', { month: 'long' })}
+                            {new Date(currentYear, currentMonth).toLocaleString('fr', {month: 'long'})}
                         </span>
                         <button onClick={nextMonth}>&gt;</button>
                     </div>
@@ -161,7 +177,7 @@ export default function EventParticipation() {
                     </div>
                     <div className="dates">
                         {dates.map((dateObj, index) => {
-                            const { day, currentMonth: isCurrentMonth, event } = dateObj;
+                            const {day, currentMonth: isCurrentMonth, event} = dateObj;
                             const date = new Date(
                                 currentYear,
                                 isCurrentMonth ? currentMonth : currentMonth + (day > 15 ? -1 : 1),
@@ -176,7 +192,7 @@ export default function EventParticipation() {
                                     className={`${event ? 'event-day' : ''} ${isCurrentMonth ? '' : 'other-month'}`}
                                     onClick={() => {
                                         if (event) {
-                                            
+
                                             handleEventClick(event);
                                             handleParticipationClick(date);
                                         }
@@ -197,7 +213,7 @@ export default function EventParticipation() {
                 {selectedEvent && (
                     <section id="details-evenement">
                         <div className="upper-section">
-                            <img src={selectedEvent.image} alt="image de l'événement" />
+                            <img src={selectedEvent.image} alt="image de l'événement"/>
                             <div className="event-info">
                                 <h2>{selectedEvent.titre}</h2>
                                 <p>{selectedEvent.date.toLocaleDateString("fr")}</p>
@@ -206,7 +222,8 @@ export default function EventParticipation() {
                         </div>
                         <p className="description">{selectedEvent.description}</p>
                         <div className="button-wrapper">
-                            <button disabled={participatedInEvent} onClick={() => handleParticipation(selectedEvent._id)}>
+                            <button disabled={participatedInEvent}
+                                    onClick={() => handleParticipation(selectedEvent._id)}>
                                 {participatedInEvent ? 'Participé' : 'Je participe'}
                             </button>
                         </div>
