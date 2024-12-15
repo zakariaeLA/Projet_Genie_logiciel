@@ -1,7 +1,5 @@
 const express = require('express');
 const Etudiant = require('../models/Etudiant'); // Modèle Etudiant
-const Evenement = require('../models/Evenement');
-const path = require('path');
 const router = express.Router();
 
 // Récupérer uniquement les événements participés et à venir d’un étudiant

@@ -31,9 +31,11 @@ router.post("/connexion", async (req, res) => {
     }
 
     // Génération du token JWT
-    const token = jwt.sign({ email: etudiant.email }, "secret", {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+        { id: etudiant.id },
+        process.env.JWT_SECRET, // Clé secrète pour signer le token
+        { expiresIn: '7h' } // Le token expire après 1 heure
+    );
 
     return res.status(200).json({ token, message: "Connexion réussie." });
   } catch (error) {

@@ -20,7 +20,7 @@ function App() {
         <Route path="/connexion" element={<Connexion />} />
         <Route path="/evenementsavenir" element={<EvenementsAvenir/>} />
         <Route path="/evenementshistorique" element={<EvenementsHistorique/>} />
-        <Route path="/clubInfo/:clubId/:studentId" element={<ClubInfo/>} />
+        <Route path="/clubInfo/:clubId" element={<ClubInfo/>} />
       </Routes>
     </Router>
   );
