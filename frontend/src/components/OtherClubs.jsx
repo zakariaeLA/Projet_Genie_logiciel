@@ -49,11 +49,58 @@ const OtherClubs = () => {
     fetchClubs();
   }, []); 
 
-  // ... (rest of your component code: filtering, handlers, etc.)
+    // Filter clubs based on the search query and category
+  const filteredClubs = clubs.filter(
+    (club) =>
+      club.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      (selectedCategory === "Tous" || club.categories.includes(selectedCategory))
+  );
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+    setAnchorEl(null); // Close the menu after selecting a category
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      {/* ... (search and filter) */}
+      {/* Search and Filter Row */}
+      <Box sx={{ display: "flex", alignItems: "center", marginBottom: "30px" }}>
+        {/* Search input */}
+        <TextField
+          label="Rechercher un club"
+          variant="outlined"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          sx={{ marginRight: "20px", width: "300px" }}
+        />
+
+        {/* Filter button with icon */}
+        <IconButton onClick={handleMenuClick}>
+          <FilterListIcon />
+        </IconButton>
+        <Menu anchorEl={anchorEl} open={open} onClose={handleMenuClose}>
+          {["Tous", "science", "Sport", "Art", "entreprise"].map((category) => (
+            <MenuItem
+              key={category}
+              selected={selectedCategory === category}
+              onClick={() => handleCategoryChange(category)}
+            >
+              {category}
+            </MenuItem>
+          ))}
+        </Menu>
 
       {/* Display error message if any */}
       {error && <Typography color="error">{error}</Typography>}
